@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { RestaurantInfo, MenuItem } = require('../models');
+const { RestaurantInfo, MenuItem, GalleryImage, InstagramPost } = require('../models');
 
 // Public homepage
 router.get('/', async (req, res) => {
@@ -10,10 +10,22 @@ router.get('/', async (req, res) => {
             where: { isVisible: true },
             order: [['position', 'ASC']]
         });
+        const galleryImages = await GalleryImage.findAll({
+            where: { isVisible: true },
+            order: [['position', 'ASC']],
+            limit: 8
+        });
+        const instagramPosts = await InstagramPost.findAll({
+            where: { isVisible: true },
+            order: [['position', 'ASC']],
+            limit: 6
+        });
 
         res.render('index', {
             restaurant: restaurant || {},
-            menuItems: menuItems || []
+            menuItems: menuItems || [],
+            galleryImages: galleryImages || [],
+            instagramPosts: instagramPosts || []
         });
     } catch (error) {
         console.error('Error loading homepage:', error);

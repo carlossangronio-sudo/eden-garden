@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcrypt');
 const rateLimit = require('express-rate-limit');
-const { RestaurantInfo, MenuItem, AdminUser, GalleryImage } = require('../models');
+const { RestaurantInfo, MenuItem, AdminUser, GalleryImage, InstagramPost } = require('../models');
 const { requireAuth } = require('../middleware/auth');
 
 // Rate limiter pour le login (5 tentatives par 15 min)
@@ -589,6 +589,157 @@ router.post('/gallery/:id/toggle', requireAuth, async (req, res) => {
     } catch (error) {
         console.error('Error:', error);
         res.redirect('/admin/gallery');
+    }
+});
+
+// ========== INSTAGRAM POSTS ==========
+
+router.get('/instagram', requireAuth, async (req, res) => {
+    try {
+        const posts = await InstagramPost.findAll({ order: [['position', 'ASC']] });
+        res.render('admin/instagram/index', {
+            adminEmail: req.session.adminEmail,
+            posts,
+            success: req.query.success === '1'
+        });
+    } catch (error) {
+        console.error('Error:', error);
+        res.status(500).render('admin/error', {
+            message: 'Erreur serveur',
+            adminEmail: req.session.adminEmail
+        });
+    }
+});
+
+router.get('/instagram/new', requireAuth, (req, res) => {
+    res.render('admin/instagram/form', {
+        adminEmail: req.session.adminEmail,
+        post: null,
+        isEdit: false,
+        error: null
+    });
+});
+
+router.post('/instagram/new', requireAuth, async (req, res) => {
+    try {
+        let postUrl = sanitizeUrl(req.body.postUrl);
+
+        if (!postUrl) {
+            return res.render('admin/instagram/form', {
+                adminEmail: req.session.adminEmail,
+                post: req.body,
+                isEdit: false,
+                error: 'L\'URL du post Instagram est requise'
+            });
+        }
+
+        // Extraire l'URL propre d'Instagram
+        const instagramMatch = postUrl.match(/instagram\.com\/(p|reel|tv)\/([A-Za-z0-9_-]+)/);
+        if (!instagramMatch) {
+            return res.render('admin/instagram/form', {
+                adminEmail: req.session.adminEmail,
+                post: req.body,
+                isEdit: false,
+                error: 'URL Instagram invalide. Format: https://www.instagram.com/p/XXX ou /reel/XXX'
+            });
+        }
+
+        const postType = instagramMatch[1] === 'reel' ? 'reel' : (instagramMatch[1] === 'tv' ? 'video' : 'post');
+        const postId = instagramMatch[2];
+        postUrl = `https://www.instagram.com/${instagramMatch[1]}/${postId}/`;
+
+        const maxPosition = await InstagramPost.max('position') || 0;
+
+        await InstagramPost.create({
+            postUrl,
+            caption: sanitizeString(req.body.caption, 200),
+            postType,
+            isVisible: req.body.isVisible === 'on',
+            position: maxPosition + 1
+        });
+
+        res.redirect('/admin/instagram?success=1');
+    } catch (error) {
+        console.error('Error:', error);
+        res.render('admin/instagram/form', {
+            adminEmail: req.session.adminEmail,
+            post: req.body,
+            isEdit: false,
+            error: 'Erreur lors de l\'ajout'
+        });
+    }
+});
+
+router.get('/instagram/:id/edit', requireAuth, async (req, res) => {
+    try {
+        const id = parseInt(req.params.id);
+        if (isNaN(id)) return res.redirect('/admin/instagram');
+
+        const post = await InstagramPost.findByPk(id);
+        if (!post) return res.redirect('/admin/instagram');
+
+        res.render('admin/instagram/form', {
+            adminEmail: req.session.adminEmail,
+            post,
+            isEdit: true,
+            error: null
+        });
+    } catch (error) {
+        console.error('Error:', error);
+        res.redirect('/admin/instagram');
+    }
+});
+
+router.post('/instagram/:id/edit', requireAuth, async (req, res) => {
+    try {
+        const id = parseInt(req.params.id);
+        if (isNaN(id)) return res.redirect('/admin/instagram');
+
+        const post = await InstagramPost.findByPk(id);
+        if (!post) return res.redirect('/admin/instagram');
+
+        await post.update({
+            caption: sanitizeString(req.body.caption, 200),
+            isVisible: req.body.isVisible === 'on',
+            position: parseInt(req.body.position) || post.position
+        });
+
+        res.redirect('/admin/instagram?success=1');
+    } catch (error) {
+        console.error('Error:', error);
+        res.redirect('/admin/instagram');
+    }
+});
+
+router.post('/instagram/:id/delete', requireAuth, async (req, res) => {
+    try {
+        const id = parseInt(req.params.id);
+        if (isNaN(id)) return res.redirect('/admin/instagram');
+
+        const post = await InstagramPost.findByPk(id);
+        if (post) await post.destroy();
+
+        res.redirect('/admin/instagram?success=1');
+    } catch (error) {
+        console.error('Error:', error);
+        res.redirect('/admin/instagram');
+    }
+});
+
+router.post('/instagram/:id/toggle', requireAuth, async (req, res) => {
+    try {
+        const id = parseInt(req.params.id);
+        if (isNaN(id)) return res.redirect('/admin/instagram');
+
+        const post = await InstagramPost.findByPk(id);
+        if (post) {
+            await post.update({ isVisible: !post.isVisible });
+        }
+
+        res.redirect('/admin/instagram?success=1');
+    } catch (error) {
+        console.error('Error:', error);
+        res.redirect('/admin/instagram');
     }
 });
 

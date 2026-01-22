@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Posts Instagram - Eden Garden Admin</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-900 min-h-screen">
+    <header class="bg-gray-800 border-b border-gray-700">
+        <div class="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
+            <div class="flex items-center gap-4">
+                <a href="/admin" class="text-xl font-bold text-white hover:text-amber-400">Eden Garden</a>
+                <span class="text-gray-500">|</span>
+                <span class="text-gray-400">Posts Instagram</span>
+            </div>
+            <a href="/admin/logout" class="text-red-400 hover:text-red-300 text-sm">Deconnexion</a>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-4 py-8">
+        <div class="flex items-center justify-between mb-8">
+            <h2 class="text-2xl font-bold text-white">Posts Instagram</h2>
+            <div class="flex gap-4">
+                <a href="/admin" class="text-gray-400 hover:text-white text-sm">← Retour</a>
+                <a href="/admin/instagram/new" class="px-4 py-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-lg hover:opacity-90 text-sm font-medium">
+                    + Ajouter un post
+                </a>
+            </div>
+        </div>
+
+        <% if (success) { %>
+        <div class="bg-emerald-500/10 border border-emerald-500/50 text-emerald-400 px-4 py-3 rounded-lg mb-6">
+            Operation reussie
+        </div>
+        <% } %>
+
+        <div class="bg-gray-800 rounded-xl p-4 border border-gray-700 mb-6">
+            <p class="text-gray-400 text-sm">
+                <strong class="text-white">Comment ajouter un post :</strong><br>
+                1. Va sur Instagram et ouvre le post/reel que tu veux afficher<br>
+                2. Copie l'URL (ex: https://www.instagram.com/p/ABC123/ ou /reel/XYZ789/)<br>
+                3. Colle l'URL ici
+            </p>
+        </div>
+
+        <% if (posts.length === 0) { %>
+        <div class="text-center py-16 text-gray-500">
+            <p class="text-lg mb-4">Aucun post Instagram</p>
+            <a href="/admin/instagram/new" class="text-pink-500 hover:text-pink-400">Ajouter votre premier post</a>
+        </div>
+        <% } else { %>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <% posts.forEach(post => { %>
+            <div class="bg-gray-800 rounded-xl overflow-hidden border border-gray-700 <%= !post.isVisible ? 'opacity-50' : '' %>">
+                <div class="p-4 border-b border-gray-700">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs px-2 py-1 rounded <%= post.postType === 'reel' ? 'bg-pink-500/20 text-pink-400' : post.postType === 'video' ? 'bg-purple-500/20 text-purple-400' : 'bg-blue-500/20 text-blue-400' %>">
+                            <%= post.postType === 'reel' ? 'Reel' : post.postType === 'video' ? 'Video' : 'Post' %>
+                        </span>
+                        <% if (!post.isVisible) { %>
+                        <span class="text-xs bg-red-500 text-white px-2 py-1 rounded">Masque</span>
+                        <% } %>
+                    </div>
+                    <p class="text-white text-sm mt-2 truncate"><%= post.caption || 'Sans description' %></p>
+                    <p class="text-gray-500 text-xs mt-1 truncate"><%= post.postUrl %></p>
+                </div>
+                <div class="p-3 flex gap-2">
+                    <form method="POST" action="/admin/instagram/<%= post.id %>/toggle" class="flex-1">
+                        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                        <button type="submit" class="w-full text-xs py-2 rounded <%= post.isVisible ? 'bg-gray-700 text-gray-300' : 'bg-emerald-600 text-white' %>">
+                            <%= post.isVisible ? 'Masquer' : 'Afficher' %>
+                        </button>
+                    </form>
+                    <a href="/admin/instagram/<%= post.id %>/edit" class="flex-1 text-center text-xs py-2 bg-blue-600 text-white rounded">Modifier</a>
+                    <form method="POST" action="/admin/instagram/<%= post.id %>/delete" onsubmit="return confirm('Supprimer ce post?')">
+                        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                        <button type="submit" class="text-xs py-2 px-3 bg-red-600 text-white rounded">X</button>
+                    </form>
+                </div>
+            </div>
+            <% }) %>
+        </div>
+        <% } %>
+    </main>
+</body>
+</html>

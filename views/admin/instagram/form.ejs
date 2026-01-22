@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= isEdit ? 'Modifier' : 'Ajouter' %> un post Instagram - Eden Garden Admin</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-900 min-h-screen">
+    <header class="bg-gray-800 border-b border-gray-700">
+        <div class="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
+            <div class="flex items-center gap-4">
+                <a href="/admin" class="text-xl font-bold text-white hover:text-amber-400">Eden Garden</a>
+                <span class="text-gray-500">|</span>
+                <span class="text-gray-400">Posts Instagram</span>
+            </div>
+            <a href="/admin/logout" class="text-red-400 hover:text-red-300 text-sm">Deconnexion</a>
+        </div>
+    </header>
+
+    <main class="max-w-2xl mx-auto px-4 py-8">
+        <div class="flex items-center justify-between mb-8">
+            <h2 class="text-2xl font-bold text-white"><%= isEdit ? 'Modifier' : 'Ajouter' %> un post Instagram</h2>
+            <a href="/admin/instagram" class="text-gray-400 hover:text-white text-sm">← Retour</a>
+        </div>
+
+        <% if (error) { %>
+        <div class="bg-red-500/10 border border-red-500/50 text-red-400 px-4 py-3 rounded-lg mb-6">
+            <%= error %>
+        </div>
+        <% } %>
+
+        <form method="POST" action="/admin/instagram/<%= isEdit ? post.id + '/edit' : 'new' %>" class="space-y-6">
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+
+            <div class="bg-gray-800 rounded-xl p-6 border border-gray-700 space-y-4">
+                <% if (!isEdit) { %>
+                <div>
+                    <label class="block text-sm font-medium text-gray-300 mb-2">URL du post Instagram *</label>
+                    <input type="text" name="postUrl" value="<%= post?.postUrl || '' %>" required
+                        class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-pink-500"
+                        placeholder="https://www.instagram.com/p/ABC123/ ou /reel/XYZ789/">
+                    <p class="text-xs text-gray-500 mt-1">Formats acceptes : /p/ (posts), /reel/ (reels), /tv/ (IGTV)</p>
+                </div>
+                <% } else { %>
+                <div>
+                    <label class="block text-sm font-medium text-gray-300 mb-2">URL du post</label>
+                    <p class="text-gray-400 text-sm bg-gray-700 px-4 py-3 rounded-lg"><%= post?.postUrl %></p>
+                    <p class="text-xs text-gray-500 mt-1">L'URL ne peut pas etre modifiee. Supprimez et recreez le post si necessaire.</p>
+                </div>
+                <% } %>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-300 mb-2">Description (optionnel)</label>
+                    <input type="text" name="caption" value="<%= post?.caption || '' %>"
+                        class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-pink-500"
+                        placeholder="Description pour l'admin">
+                </div>
+
+                <% if (isEdit) { %>
+                <div>
+                    <label class="block text-sm font-medium text-gray-300 mb-2">Position</label>
+                    <input type="number" name="position" value="<%= post?.position || 0 %>"
+                        class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-pink-500">
+                </div>
+                <% } %>
+
+                <div class="flex items-center gap-3">
+                    <input type="checkbox" name="isVisible" id="isVisible" <%= post?.isVisible !== false ? 'checked' : '' %>
+                        class="w-5 h-5 rounded bg-gray-700 border-gray-600 text-pink-500 focus:ring-pink-500">
+                    <label for="isVisible" class="text-gray-300">Visible sur le site</label>
+                </div>
+            </div>
+
+            <div class="flex justify-end gap-4">
+                <a href="/admin/instagram" class="px-6 py-3 bg-gray-700 text-white rounded-lg hover:bg-gray-600">Annuler</a>
+                <button type="submit" class="px-6 py-3 bg-gradient-to-r from-purple-500 to-pink-500 text-white font-bold rounded-lg hover:opacity-90">
+                    <%= isEdit ? 'Enregistrer' : 'Ajouter' %>
+                </button>
+            </div>
+        </form>
+    </main>
+</body>
+</html>
