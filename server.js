@@ -110,6 +110,64 @@ app.use(async (req, res, next) => {
     }
 });
 
+// Route seed (à supprimer après usage)
+app.get('/api/seed', async (req, res) => {
+    const bcrypt = require('bcrypt');
+    const logs = [];
+    const log = (msg) => { console.log(msg); logs.push(msg); };
+
+    try {
+        log('1. Seed started');
+        log('2. Dropping old tables...');
+
+        await sequelize.query(`DROP TABLE IF EXISTS menu_items CASCADE`);
+        await sequelize.query(`DROP TABLE IF EXISTS admin_users CASCADE`);
+        await sequelize.query(`DROP TABLE IF EXISTS restaurant_info CASCADE`);
+        log('3. Tables dropped');
+
+        log('4. Syncing models...');
+        await sequelize.sync({ force: true });
+        log('5. Models synced');
+
+        const { RestaurantInfo, MenuItem, AdminUser } = require('./models');
+
+        log('6. Creating admin...');
+        const adminEmail = process.env.ADMIN_EMAIL || 'admin@edengarden.fr';
+        const adminPassword = process.env.ADMIN_PASSWORD || 'admin123';
+        const passwordHash = await bcrypt.hash(adminPassword, 10);
+
+        await AdminUser.create({ email: adminEmail, passwordHash });
+        log('7. Admin created: ' + adminEmail);
+
+        log('8. Creating restaurant info...');
+        await RestaurantInfo.create({
+            name: 'Eden Garden',
+            address: '30 Quai Lunel',
+            city: 'Nice',
+            postalCode: '06300',
+            phone: '04 93 XX XX XX',
+            openingHours: 'Mer-Dim: 12h-00h30',
+            heroTagline: 'Nice Port · France',
+            heroDescription: 'Restaurant Bar Lounge & Chicha Premium'
+        });
+        log('9. Restaurant created');
+
+        log('10. Creating menu items...');
+        await MenuItem.bulkCreate([
+            { title: 'Poulet Yassa', description: 'Cuisse de poulet marinée', price: 18, category: 'Plat', isVisible: true, position: 1 },
+            { title: 'Rougail Saucisse', description: 'Saucisses fumées', price: 19, category: 'Plat', isVisible: true, position: 2 },
+            { title: 'Mix Grill Eden', description: 'Assortiment royal', price: 28, category: 'Plat', isVisible: true, position: 3 }
+        ]);
+        log('11. Menu created');
+        log('12. SEED COMPLETE!');
+
+        res.json({ success: true, admin: adminEmail, logs });
+    } catch (error) {
+        log('ERROR: ' + error.message);
+        res.status(500).json({ error: error.message, stack: error.stack, logs });
+    }
+});
+
 // Routes
 app.use('/', publicRoutes);
 app.use('/admin', adminRoutes);
