@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= isEdit ? 'Modifier' : 'Ajouter' %> une photo - Eden Garden Admin</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-900 min-h-screen">
+    <header class="bg-gray-800 border-b border-gray-700">
+        <div class="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
+            <div class="flex items-center gap-4">
+                <a href="/admin" class="text-xl font-bold text-white hover:text-amber-400">Eden Garden</a>
+                <span class="text-gray-500">|</span>
+                <span class="text-gray-400">Galerie Photos</span>
+            </div>
+            <a href="/admin/logout" class="text-red-400 hover:text-red-300 text-sm">Deconnexion</a>
+        </div>
+    </header>
+
+    <main class="max-w-2xl mx-auto px-4 py-8">
+        <div class="flex items-center justify-between mb-8">
+            <h2 class="text-2xl font-bold text-white"><%= isEdit ? 'Modifier' : 'Ajouter' %> une photo</h2>
+            <a href="/admin/gallery" class="text-gray-400 hover:text-white text-sm">← Retour a la galerie</a>
+        </div>
+
+        <% if (error) { %>
+        <div class="bg-red-500/10 border border-red-500/50 text-red-400 px-4 py-3 rounded-lg mb-6">
+            <%= error %>
+        </div>
+        <% } %>
+
+        <form method="POST" action="/admin/gallery/<%= isEdit ? image.id + '/edit' : 'new' %>" class="space-y-6">
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+
+            <div class="bg-gray-800 rounded-xl p-6 border border-gray-700 space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-300 mb-2">URL de l'image *</label>
+                    <input type="text" name="imageUrl" value="<%= image?.imageUrl || '' %>" required
+                        class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-amber-500"
+                        placeholder="https://images.unsplash.com/...">
+                    <p class="text-xs text-gray-500 mt-1">Utilisez Unsplash, Imgur ou votre propre hebergement</p>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-300 mb-2">Titre (optionnel)</label>
+                    <input type="text" name="title" value="<%= image?.title || '' %>"
+                        class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-amber-500"
+                        placeholder="Description de la photo">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-300 mb-2">Categorie</label>
+                    <select name="category" class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-amber-500">
+                        <option value="general" <%= image?.category === 'general' ? 'selected' : '' %>>General</option>
+                        <option value="plats" <%= image?.category === 'plats' ? 'selected' : '' %>>Plats</option>
+                        <option value="cocktails" <%= image?.category === 'cocktails' ? 'selected' : '' %>>Cocktails</option>
+                        <option value="ambiance" <%= image?.category === 'ambiance' ? 'selected' : '' %>>Ambiance</option>
+                        <option value="terrasse" <%= image?.category === 'terrasse' ? 'selected' : '' %>>Terrasse</option>
+                        <option value="chicha" <%= image?.category === 'chicha' ? 'selected' : '' %>>Chicha</option>
+                    </select>
+                </div>
+
+                <% if (isEdit) { %>
+                <div>
+                    <label class="block text-sm font-medium text-gray-300 mb-2">Position</label>
+                    <input type="number" name="position" value="<%= image?.position || 0 %>"
+                        class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-amber-500">
+                </div>
+                <% } %>
+
+                <div class="flex items-center gap-3">
+                    <input type="checkbox" name="isVisible" id="isVisible" <%= image?.isVisible !== false ? 'checked' : '' %>
+                        class="w-5 h-5 rounded bg-gray-700 border-gray-600 text-amber-500 focus:ring-amber-500">
+                    <label for="isVisible" class="text-gray-300">Visible sur le site</label>
+                </div>
+            </div>
+
+            <!-- Preview -->
+            <div class="bg-gray-800 rounded-xl p-6 border border-gray-700">
+                <h3 class="text-white font-medium mb-4">Apercu</h3>
+                <div id="preview" class="aspect-video bg-gray-700 rounded-lg flex items-center justify-center overflow-hidden">
+                    <% if (image?.imageUrl) { %>
+                    <img src="<%= image.imageUrl %>" alt="Preview" class="w-full h-full object-cover">
+                    <% } else { %>
+                    <span class="text-gray-500">Entrez une URL pour voir l'apercu</span>
+                    <% } %>
+                </div>
+            </div>
+
+            <div class="flex justify-end gap-4">
+                <a href="/admin/gallery" class="px-6 py-3 bg-gray-700 text-white rounded-lg hover:bg-gray-600">Annuler</a>
+                <button type="submit" class="px-6 py-3 bg-amber-600 text-white font-bold rounded-lg hover:bg-amber-500">
+                    <%= isEdit ? 'Enregistrer' : 'Ajouter' %>
+                </button>
+            </div>
+        </form>
+    </main>
+
+    <script>
+        const urlInput = document.querySelector('input[name="imageUrl"]');
+        const preview = document.getElementById('preview');
+
+        urlInput.addEventListener('input', () => {
+            const url = urlInput.value.trim();
+            if (url) {
+                preview.innerHTML = `<img src="${url}" alt="Preview" class="w-full h-full object-cover" onerror="this.parentElement.innerHTML='<span class=\\'text-red-400\\'>Image non trouvee</span>'">`;
+            } else {
+                preview.innerHTML = '<span class="text-gray-500">Entrez une URL pour voir l\\'apercu</span>';
+            }
+        });
+    </script>
+</body>
+</html>

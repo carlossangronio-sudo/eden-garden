@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcrypt');
 const rateLimit = require('express-rate-limit');
-const { RestaurantInfo, MenuItem, AdminUser } = require('../models');
+const { RestaurantInfo, MenuItem, AdminUser, GalleryImage } = require('../models');
 const { requireAuth } = require('../middleware/auth');
 
 // Rate limiter pour le login (5 tentatives par 15 min)
@@ -436,6 +436,159 @@ router.post('/menu/:id/delete', requireAuth, async (req, res) => {
     } catch (error) {
         console.error('Error:', error);
         res.redirect('/admin/menu');
+    }
+});
+
+// ========== GALERIE PHOTOS ==========
+
+router.get('/gallery', requireAuth, async (req, res) => {
+    try {
+        const images = await GalleryImage.findAll({ order: [['position', 'ASC']] });
+        res.render('admin/gallery/index', {
+            adminEmail: req.session.adminEmail,
+            images,
+            success: req.query.success === '1'
+        });
+    } catch (error) {
+        console.error('Error:', error);
+        res.status(500).render('admin/error', {
+            message: 'Erreur serveur',
+            adminEmail: req.session.adminEmail
+        });
+    }
+});
+
+router.get('/gallery/new', requireAuth, (req, res) => {
+    res.render('admin/gallery/form', {
+        adminEmail: req.session.adminEmail,
+        image: null,
+        isEdit: false,
+        error: null
+    });
+});
+
+router.post('/gallery/new', requireAuth, async (req, res) => {
+    try {
+        const imageUrl = sanitizeUrl(req.body.imageUrl);
+
+        if (!imageUrl) {
+            return res.render('admin/gallery/form', {
+                adminEmail: req.session.adminEmail,
+                image: req.body,
+                isEdit: false,
+                error: 'L\'URL de l\'image est requise'
+            });
+        }
+
+        const maxPosition = await GalleryImage.max('position') || 0;
+
+        await GalleryImage.create({
+            title: sanitizeString(req.body.title, 100),
+            imageUrl,
+            category: sanitizeString(req.body.category, 50) || 'general',
+            isVisible: req.body.isVisible === 'on',
+            position: maxPosition + 1
+        });
+
+        res.redirect('/admin/gallery?success=1');
+    } catch (error) {
+        console.error('Error:', error);
+        res.render('admin/gallery/form', {
+            adminEmail: req.session.adminEmail,
+            image: req.body,
+            isEdit: false,
+            error: 'Erreur lors de l\'ajout'
+        });
+    }
+});
+
+router.get('/gallery/:id/edit', requireAuth, async (req, res) => {
+    try {
+        const id = parseInt(req.params.id);
+        if (isNaN(id)) return res.redirect('/admin/gallery');
+
+        const image = await GalleryImage.findByPk(id);
+        if (!image) return res.redirect('/admin/gallery');
+
+        res.render('admin/gallery/form', {
+            adminEmail: req.session.adminEmail,
+            image,
+            isEdit: true,
+            error: null
+        });
+    } catch (error) {
+        console.error('Error:', error);
+        res.redirect('/admin/gallery');
+    }
+});
+
+router.post('/gallery/:id/edit', requireAuth, async (req, res) => {
+    try {
+        const id = parseInt(req.params.id);
+        if (isNaN(id)) return res.redirect('/admin/gallery');
+
+        const image = await GalleryImage.findByPk(id);
+        if (!image) return res.redirect('/admin/gallery');
+
+        const imageUrl = sanitizeUrl(req.body.imageUrl);
+        if (!imageUrl) {
+            return res.render('admin/gallery/form', {
+                adminEmail: req.session.adminEmail,
+                image: { ...req.body, id },
+                isEdit: true,
+                error: 'L\'URL de l\'image est requise'
+            });
+        }
+
+        await image.update({
+            title: sanitizeString(req.body.title, 100),
+            imageUrl,
+            category: sanitizeString(req.body.category, 50) || 'general',
+            isVisible: req.body.isVisible === 'on',
+            position: parseInt(req.body.position) || image.position
+        });
+
+        res.redirect('/admin/gallery?success=1');
+    } catch (error) {
+        console.error('Error:', error);
+        res.render('admin/gallery/form', {
+            adminEmail: req.session.adminEmail,
+            image: { ...req.body, id: req.params.id },
+            isEdit: true,
+            error: 'Erreur lors de la mise à jour'
+        });
+    }
+});
+
+router.post('/gallery/:id/delete', requireAuth, async (req, res) => {
+    try {
+        const id = parseInt(req.params.id);
+        if (isNaN(id)) return res.redirect('/admin/gallery');
+
+        const image = await GalleryImage.findByPk(id);
+        if (image) await image.destroy();
+
+        res.redirect('/admin/gallery?success=1');
+    } catch (error) {
+        console.error('Error:', error);
+        res.redirect('/admin/gallery');
+    }
+});
+
+router.post('/gallery/:id/toggle', requireAuth, async (req, res) => {
+    try {
+        const id = parseInt(req.params.id);
+        if (isNaN(id)) return res.redirect('/admin/gallery');
+
+        const image = await GalleryImage.findByPk(id);
+        if (image) {
+            await image.update({ isVisible: !image.isVisible });
+        }
+
+        res.redirect('/admin/gallery?success=1');
+    } catch (error) {
+        console.error('Error:', error);
+        res.redirect('/admin/gallery');
     }
 });
 

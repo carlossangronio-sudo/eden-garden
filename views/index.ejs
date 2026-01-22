@@ -456,7 +456,19 @@
                     </div>
                 </div>
 
-                <!-- Abstract Visual -->
+                <!-- Mobile Images -->
+                <div class="grid grid-cols-2 gap-4 lg:hidden mt-8">
+                    <div class="rounded-2xl overflow-hidden border border-white/10 aspect-square">
+                        <img src="<%= restaurant.atmosphereImage1Url || 'https://images.unsplash.com/photo-1540224871915-bc8ffb782bdf?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80' %>"
+                            alt="Bar et cocktails" class="w-full h-full object-cover">
+                    </div>
+                    <div class="rounded-2xl overflow-hidden border border-white/10 aspect-square">
+                        <img src="<%= restaurant.atmosphereImage2Url || 'https://images.unsplash.com/photo-1533658510255-b46e330a9e22?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80' %>"
+                            alt="Ambiance lounge" class="w-full h-full object-cover">
+                    </div>
+                </div>
+
+                <!-- Desktop Abstract Visual -->
                 <div class="relative h-[600px] w-full hidden lg:block">
                     <div
                         class="absolute top-0 right-0 w-3/4 h-[90%] rounded-2xl overflow-hidden border border-white/10">
