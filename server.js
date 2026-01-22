@@ -15,7 +15,7 @@ const isProduction = process.env.NODE_ENV === 'production';
 // Pool PostgreSQL pour les sessions
 const pgPool = new Pool({
     connectionString: process.env.POSTGRES_URL || process.env.DATABASE_URL,
-    ssl: isProduction ? { rejectUnauthorized: false } : false
+    ssl: { rejectUnauthorized: false }
 });
 
 // View engine

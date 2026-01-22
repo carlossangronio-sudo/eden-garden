@@ -1,7 +1,10 @@
 {
   "permissions": {
     "allow": [
-      "Bash(node migrate.js:*)"
+      "Bash(node migrate.js:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)"
     ]
   }
 }

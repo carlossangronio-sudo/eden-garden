@@ -1,23 +1,22 @@
 const { Sequelize } = require('sequelize');
 
-// Utiliser POSTGRES_URL de Vercel ou DATABASE_URL en local
+// Accepte POSTGRES_URL (Vercel) ou DATABASE_URL (Neon)
 const connectionString = process.env.POSTGRES_URL || process.env.DATABASE_URL;
 
 if (!connectionString) {
     console.error('ERREUR: Variable POSTGRES_URL ou DATABASE_URL non définie');
-    console.error('Définissez-la dans votre fichier .env ou dans les variables Vercel');
     process.exit(1);
 }
 
 const sequelize = new Sequelize(connectionString, {
     dialect: 'postgres',
     dialectOptions: {
-        ssl: process.env.NODE_ENV === 'production' ? {
+        ssl: {
             require: true,
-            rejectUnauthorized: false // Nécessaire pour Vercel Postgres
-        } : false
+            rejectUnauthorized: false
+        }
     },
-    logging: process.env.NODE_ENV === 'development' ? console.log : false,
+    logging: false,
     pool: {
         max: 5,
         min: 0,
