@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mentions Legales - <%= restaurant.name || 'Eden Garden' %></title>
+    <meta name="robots" content="noindex">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap');
+        h1, h2, h3 { font-family: 'Playfair Display', serif; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    </style>
+</head>
+
+<body class="bg-[#050505] text-slate-300 min-h-screen">
+    <!-- Navigation -->
+    <nav class="bg-black/50 backdrop-blur-md border-b border-white/10">
+        <div class="max-w-4xl mx-auto px-6 py-4 flex items-center justify-between">
+            <a href="/" class="text-xl font-semibold text-white">
+                <span class="text-amber-500">Eden</span> Garden
+            </a>
+            <a href="/" class="text-sm text-slate-400 hover:text-white transition-colors">
+                Retour au site
+            </a>
+        </div>
+    </nav>
+
+    <!-- Content -->
+    <main class="max-w-4xl mx-auto px-6 py-16">
+        <h1 class="text-4xl text-white mb-8">Mentions Legales</h1>
+
+        <div class="space-y-8 text-slate-400 leading-relaxed">
+            <!-- Editeur -->
+            <section class="bg-white/5 rounded-2xl p-6 border border-white/10">
+                <h2 class="text-xl text-white mb-4">1. Editeur du site</h2>
+                <p>
+                    Le site internet <strong class="text-white">edengarden-nice.fr</strong> est edite par :<br><br>
+                    <strong class="text-white"><%= restaurant.name || 'Eden Garden' %></strong><br>
+                    Restaurant - Bar - Lounge<br><br>
+                    <strong class="text-amber-400">Siege social :</strong><br>
+                    <%= restaurant.address || '30 Quai Lunel' %><br>
+                    <%= restaurant.postalCode || '06300' %> <%= restaurant.city || 'Nice' %><br>
+                    France<br><br>
+                    <% if (restaurant.phone) { %><strong class="text-amber-400">Telephone :</strong> <%= restaurant.phone %><br><% } %>
+                    <% if (restaurant.email) { %><strong class="text-amber-400">Email :</strong> <%= restaurant.email %><br><% } %>
+                    <br>
+                    <strong class="text-amber-400">Forme juridique :</strong> [A completer - ex: SARL, SAS, Auto-entrepreneur]<br>
+                    <strong class="text-amber-400">Capital social :</strong> [A completer]<br>
+                    <strong class="text-amber-400">SIRET :</strong> [A completer]<br>
+                    <strong class="text-amber-400">RCS :</strong> Nice [A completer]<br>
+                    <strong class="text-amber-400">N° TVA Intracommunautaire :</strong> [A completer]
+                </p>
+                <p class="text-xs text-amber-500/70 mt-4 p-3 bg-amber-500/10 rounded-lg">
+                    Note : Les informations entre crochets doivent etre completees avec vos informations legales reelles.
+                </p>
+            </section>
+
+            <!-- Directeur de publication -->
+            <section class="bg-white/5 rounded-2xl p-6 border border-white/10">
+                <h2 class="text-xl text-white mb-4">2. Directeur de la publication</h2>
+                <p>
+                    Le directeur de la publication du site est :<br><br>
+                    <strong class="text-white">[Nom du gerant / responsable]</strong><br>
+                    En qualite de : Gerant / President<br><br>
+                    Contact : <% if (restaurant.email) { %><a href="mailto:<%= restaurant.email %>" class="text-amber-500 hover:text-amber-400"><%= restaurant.email %></a><% } else { %>[Email de contact]<% } %>
+                </p>
+            </section>
+
+            <!-- Hebergeur -->
+            <section class="bg-white/5 rounded-2xl p-6 border border-white/10">
+                <h2 class="text-xl text-white mb-4">3. Hebergement</h2>
+                <p>
+                    Ce site est heberge par :<br><br>
+                    <strong class="text-white">[Nom de l'hebergeur]</strong><br>
+                    [Adresse de l'hebergeur]<br>
+                    [Code postal et ville]<br>
+                    [Pays]<br><br>
+                    Telephone : [Numero]<br>
+                    Site web : [URL du site de l'hebergeur]
+                </p>
+                <p class="text-xs text-slate-500 mt-4">
+                    Exemples d'hebergeurs courants : OVH, Vercel, Netlify, Hostinger, Ionos, etc.
+                </p>
+            </section>
+
+            <!-- Propriete intellectuelle -->
+            <section class="bg-white/5 rounded-2xl p-6 border border-white/10">
+                <h2 class="text-xl text-white mb-4">4. Propriete intellectuelle</h2>
+                <p>
+                    L'ensemble du contenu de ce site internet, incluant de facon non limitative les textes, graphismes,
+                    images, photographies, logos, icones, sons, videos, logiciels et tout autre element, est la propriete
+                    exclusive de <strong class="text-white"><%= restaurant.name || 'Eden Garden' %></strong>, a l'exception
+                    des marques, logos ou contenus appartenant a des societes tierces partenaires.
+                </p>
+                <p class="mt-4">
+                    Toute reproduction, representation, modification, publication, adaptation, totale ou partielle,
+                    de ces elements, quel que soit le moyen ou le procede utilise, est interdite sans l'autorisation
+                    ecrite prealable de <strong class="text-white"><%= restaurant.name || 'Eden Garden' %></strong>.
+                </p>
+                <p class="mt-4">
+                    Toute exploitation non autorisee du site ou de son contenu, des informations qui y sont divulguees,
+                    engagerait la responsabilite de l'utilisateur et constituerait une contrefacon sanctionnee par les
+                    articles L.335-2 et suivants du Code de la Propriete Intellectuelle.
+                </p>
+            </section>
+
+            <!-- Limitation de responsabilite -->
+            <section class="bg-white/5 rounded-2xl p-6 border border-white/10">
+                <h2 class="text-xl text-white mb-4">5. Limitation de responsabilite</h2>
+                <p>
+                    <strong class="text-white"><%= restaurant.name || 'Eden Garden' %></strong> s'efforce d'assurer
+                    l'exactitude et la mise a jour des informations diffusees sur ce site. Toutefois,
+                    <strong class="text-white"><%= restaurant.name || 'Eden Garden' %></strong> ne peut garantir
+                    l'exactitude, la precision ou l'exhaustivite des informations mises a disposition sur ce site.
+                </p>
+                <p class="mt-4">
+                    En consequence, <strong class="text-white"><%= restaurant.name || 'Eden Garden' %></strong>
+                    decline toute responsabilite :
+                </p>
+                <ul class="list-disc list-inside mt-4 space-y-2 ml-4">
+                    <li>Pour toute imprecision, inexactitude ou omission portant sur des informations disponibles sur le site</li>
+                    <li>Pour tous dommages resultant d'une intrusion frauduleuse d'un tiers</li>
+                    <li>Pour tous dommages, directs ou indirects, quelles qu'en soient les causes, origines, natures ou consequences</li>
+                    <li>Pour tout dommage subi par l'utilisateur ou un tiers, du fait de l'acces au site ou de son impossibilite d'y acceder</li>
+                </ul>
+            </section>
+
+            <!-- Liens hypertextes -->
+            <section class="bg-white/5 rounded-2xl p-6 border border-white/10">
+                <h2 class="text-xl text-white mb-4">6. Liens hypertextes</h2>
+                <p>
+                    Le site peut contenir des liens hypertextes vers d'autres sites internet. Ces liens sont fournis
+                    a titre indicatif et n'engagent pas la responsabilite de
+                    <strong class="text-white"><%= restaurant.name || 'Eden Garden' %></strong>.
+                </p>
+                <p class="mt-4">
+                    La mise en place de liens hypertextes par des tiers vers des pages ou des documents diffuses
+                    sur le site de <strong class="text-white"><%= restaurant.name || 'Eden Garden' %></strong> est
+                    autorisee sous reserve que les liens ne contreviennent pas aux interets de
+                    <strong class="text-white"><%= restaurant.name || 'Eden Garden' %></strong> et qu'ils garantissent
+                    la possibilite pour l'utilisateur d'identifier l'origine et l'auteur du document.
+                </p>
+            </section>
+
+            <!-- Donnees personnelles -->
+            <section class="bg-white/5 rounded-2xl p-6 border border-white/10">
+                <h2 class="text-xl text-white mb-4">7. Protection des donnees personnelles</h2>
+                <p>
+                    Conformement au Reglement General sur la Protection des Donnees (RGPD - Reglement UE 2016/679)
+                    et a la loi n°78-17 du 6 janvier 1978 relative a l'informatique, aux fichiers et aux libertes,
+                    vous disposez d'un droit d'acces, de rectification, de suppression et d'opposition aux donnees
+                    personnelles vous concernant.
+                </p>
+                <p class="mt-4">
+                    Pour exercer ces droits ou pour toute question relative au traitement de vos donnees, vous pouvez
+                    nous contacter :
+                </p>
+                <ul class="list-disc list-inside mt-4 space-y-2 ml-4">
+                    <li>Par email : <% if (restaurant.email) { %><a href="mailto:<%= restaurant.email %>" class="text-amber-500 hover:text-amber-400"><%= restaurant.email %></a><% } else { %>[Email]<% } %></li>
+                    <li>Par courrier : <%= restaurant.address || '30 Quai Lunel' %>, <%= restaurant.postalCode || '06300' %> <%= restaurant.city || 'Nice' %></li>
+                </ul>
+                <p class="mt-4">
+                    Pour plus d'informations, consultez notre
+                    <a href="/confidentialite" class="text-amber-500 hover:text-amber-400 underline">Politique de Confidentialite</a>.
+                </p>
+            </section>
+
+            <!-- Cookies -->
+            <section class="bg-white/5 rounded-2xl p-6 border border-white/10">
+                <h2 class="text-xl text-white mb-4">8. Cookies</h2>
+                <p>
+                    Ce site utilise des cookies pour ameliorer l'experience utilisateur et realiser des statistiques
+                    de frequentation. En poursuivant votre navigation sur ce site, vous acceptez l'utilisation de cookies
+                    conformement a notre <a href="/confidentialite" class="text-amber-500 hover:text-amber-400 underline">Politique de Confidentialite</a>.
+                </p>
+                <p class="mt-4">
+                    Vous pouvez a tout moment modifier vos preferences en matiere de cookies via les parametres
+                    de votre navigateur ou en utilisant notre bandeau de gestion des cookies.
+                </p>
+            </section>
+
+            <!-- Droit applicable -->
+            <section class="bg-white/5 rounded-2xl p-6 border border-white/10">
+                <h2 class="text-xl text-white mb-4">9. Droit applicable et juridiction competente</h2>
+                <p>
+                    Les presentes mentions legales sont regies par le droit francais.
+                </p>
+                <p class="mt-4">
+                    En cas de litige et a defaut d'accord amiable, le litige sera porte devant les tribunaux
+                    francais conformement aux regles de competence en vigueur.
+                </p>
+                <p class="mt-4">
+                    Pour tout litige relatif a l'interpretation ou a l'execution des presentes, les parties
+                    conviennent de rechercher prealablement une solution amiable. A defaut, les tribunaux
+                    de <strong class="text-white">Nice</strong> seront seuls competents.
+                </p>
+            </section>
+
+            <!-- Credits -->
+            <section class="bg-white/5 rounded-2xl p-6 border border-white/10">
+                <h2 class="text-xl text-white mb-4">10. Credits</h2>
+                <p>
+                    <strong class="text-amber-400">Conception et developpement du site :</strong><br>
+                    [Nom de l'agence ou du developpeur]<br><br>
+                    <strong class="text-amber-400">Credits photos :</strong><br>
+                    Certaines images proviennent de Unsplash (licence libre)<br>
+                    Photographies du restaurant : [Photographe / Eden Garden]
+                </p>
+            </section>
+        </div>
+
+        <p class="text-xs text-slate-600 mt-12 text-center">
+            Derniere mise a jour : Janvier 2025
+        </p>
+    </main>
+
+    <!-- Footer simple -->
+    <footer class="border-t border-white/10 py-8">
+        <div class="max-w-4xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-slate-500">
+            <p>&copy; 2025 <%= restaurant.name || 'Eden Garden' %>. Tous droits reserves.</p>
+            <div class="flex gap-6">
+                <a href="/mentions-legales" class="text-amber-500">Mentions legales</a>
+                <a href="/confidentialite" class="hover:text-white transition-colors">Confidentialite</a>
+            </div>
+        </div>
+    </footer>
+</body>
+
+</html>

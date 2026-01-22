@@ -1,0 +1,1113 @@
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        <%= restaurant.name || 'EDEN GARDEN' %> | Restaurant Bar Chicha - Nice Port
+    </title>
+
+    <!-- SEO Meta Tags -->
+    <meta name="description"
+        content="<%= restaurant.heroDescription || 'Eden Garden - Restaurant Bar Chicha à Nice Port. Cuisine fusion afro-réunionnaise, cocktails, chicha premium et matchs en direct.' %>">
+    <meta name="keywords"
+        content="restaurant nice, bar chicha nice, cuisine africaine, cuisine réunionnaise, nice port, lounge nice">
+    <meta name="author" content="Eden Garden Nice">
+    <meta name="robots" content="index, follow">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="restaurant">
+    <meta property="og:title" content="<%= restaurant.name || 'Eden Garden' %> - Restaurant Bar Chicha Nice">
+    <meta property="og:description"
+        content="<%= restaurant.heroDescription || 'Cuisine fusion afro-réunionnaise, cocktails, chicha premium et matchs en direct.' %>">
+    <meta property="og:url" content="https://edengarden-nice.fr">
+    <meta property="og:image" content="/images/og-image.jpg">
+    <meta property="og:locale" content="fr_FR">
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="<%= restaurant.name || 'Eden Garden' %> - Nice Port">
+    <meta name="twitter:description" content="<%= restaurant.heroDescription || 'Restaurant Bar Chicha à Nice Port' %>">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌿</text></svg>">
+    <link rel="apple-touch-icon"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌿</text></svg>">
+
+    <!-- Schema.org Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Restaurant",
+        "name": "<%= restaurant.name || 'Eden Garden' %>",
+        "description": "<%= (restaurant.heroDescription || 'Restaurant Bar Chicha a Nice Port').replace(/"/g, '\\"') %>",
+        "image": "<%= restaurant.heroImageUrl || 'https://images.unsplash.com/photo-1578474843222-959604192131?w=1200' %>",
+        "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "<%= restaurant.address || '30 Quai Lunel' %>",
+            "addressLocality": "<%= restaurant.city || 'Nice' %>",
+            "postalCode": "<%= restaurant.postalCode || '06300' %>",
+            "addressCountry": "FR"
+        },
+        <% if (restaurant.phone) { %>"telephone": "<%= restaurant.phone %>",<% } %>
+        <% if (restaurant.email) { %>"email": "<%= restaurant.email %>",<% } %>
+        "servesCuisine": ["Africaine", "Reunionnaise", "Fusion"],
+        "priceRange": "$$",
+        "openingHoursSpecification": [
+            {
+                "@type": "OpeningHoursSpecification",
+                "dayOfWeek": ["Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+                "opens": "12:00",
+                "closes": "00:30"
+            }
+        ],
+        <% if (restaurant.mapUrl) { %>"hasMap": "<%= restaurant.mapUrl %>",<% } %>
+        "url": "https://edengarden-nice.fr",
+        "sameAs": [
+            <% if (restaurant.instagramUrl) { %>"<%= restaurant.instagramUrl %>"<% } %><% if (restaurant.instagramUrl && restaurant.facebookUrl) { %>,<% } %>
+            <% if (restaurant.facebookUrl) { %>"<%= restaurant.facebookUrl %>"<% } %>
+        ],
+        "acceptsReservations": "True"
+    }
+    </script>
+
+    <!-- Preconnect for performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap');
+
+        /* Typography Override */
+        h1,
+        h2,
+        h3,
+        h4,
+        .font-serif {
+            font-family: 'Playfair Display', serif;
+        }
+
+        body,
+        p,
+        a,
+        button,
+        input,
+        select,
+        textarea {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        /* Custom Scrollbar - Hidden for cleaner look but functional */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #020617;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 3px;
+        }
+
+        /* Noise Texture for Cinematic Feel */
+        .bg-noise {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 50;
+            opacity: 0.04;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+
+        /* Complex Animations */
+        @keyframes float-slow {
+
+            0%,
+            100% {
+                transform: translateY(0px) rotate(0deg);
+            }
+
+            50% {
+                transform: translateY(-15px) rotate(1deg);
+            }
+        }
+
+        @keyframes smoke-drift {
+            0% {
+                transform: translate(0, 0) scale(1);
+                opacity: 0.3;
+            }
+
+            50% {
+                transform: translate(20px, -30px) scale(1.1);
+                opacity: 0.5;
+            }
+
+            100% {
+                transform: translate(-10px, -50px) scale(1.2);
+                opacity: 0;
+            }
+        }
+
+        @keyframes text-reveal {
+            from {
+                clip-path: inset(0 100% 0 0);
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                clip-path: inset(0 0 0 0);
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes marquee {
+            0% {
+                transform: translateX(0);
+            }
+
+            100% {
+                transform: translateX(-50%);
+            }
+        }
+
+        .animate-float {
+            animation: float-slow 8s ease-in-out infinite;
+        }
+
+        .animate-smoke {
+            animation: smoke-drift 15s infinite ease-out;
+        }
+
+        .animate-marquee {
+            animation: marquee 30s linear infinite;
+        }
+
+        .reveal-text {
+            animation: text-reveal 1.2s cubic-bezier(0.77, 0, 0.175, 1) forwards;
+            opacity: 0;
+            /* Start hidden */
+        }
+
+        /* Glassmorphism Utilities */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .glass-button {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.01) 100%);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Gold Gradient Text */
+        .text-gold-gradient {
+            background: linear-gradient(to right, #bf953f, #fcf6ba, #b38728, #fbf5b7, #aa771c);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            background-size: 200% auto;
+            animation: shine 5s linear infinite;
+        }
+
+        @keyframes shine {
+            to {
+                background-position: 200% center;
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-[#050505] text-slate-300 antialiased overflow-x-hidden">
+
+    <!-- Noise Texture Overlay -->
+    <div class="bg-noise"></div>
+
+    <!-- Navigation (Floating) -->
+    <nav class="fixed top-6 left-1/2 -translate-x-1/2 w-[90%] max-w-5xl z-50 transition-all duration-300">
+        <div class="glass-panel rounded-full px-6 py-3 flex items-center justify-between shadow-2xl shadow-black/50">
+            <a href="#"
+                class="text-xl font-serif font-semibold tracking-tighter text-white uppercase flex items-center gap-2">
+                <span class="text-amber-500">Eden</span> Garden
+            </a>
+
+            <!-- Desktop Links -->
+            <div class="hidden md:flex items-center gap-8">
+                <a href="#home"
+                    class="text-xs font-medium tracking-widest uppercase hover:text-amber-400 transition-colors">Accueil</a>
+                <a href="/menu"
+                    class="text-xs font-medium tracking-widest uppercase hover:text-amber-400 transition-colors">Menu</a>
+                <a href="#vibe"
+                    class="text-xs font-medium tracking-widest uppercase hover:text-amber-400 transition-colors">Lounge</a>
+                <a href="#contact"
+                    class="text-xs font-medium tracking-widest uppercase hover:text-amber-400 transition-colors">Infos</a>
+            </div>
+
+            <!-- Action -->
+            <div class="flex items-center gap-4">
+                <a href="<%= restaurant.reservationExternalUrl || '#book' %>" target="_blank" rel="noopener"
+                    class="hidden sm:flex items-center gap-2 bg-amber-600 text-white text-xs font-semibold uppercase tracking-widest px-5 py-2.5 rounded-full hover:bg-amber-500 transition-all hover:shadow-[0_0_20px_-5px_rgba(217,119,6,0.5)]">
+                    Réserver
+                </a>
+                <button id="mobileMenuBtn" class="md:hidden text-white p-2" aria-label="Menu">
+                    <iconify-icon icon="mdi:menu" width="24" id="menuIcon"></iconify-icon>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu Overlay -->
+    <div id="mobileMenu" class="fixed inset-0 z-40 hidden">
+        <div class="absolute inset-0 bg-black/90 backdrop-blur-xl"></div>
+        <div class="relative h-full flex flex-col items-center justify-center gap-8">
+            <a href="#home"
+                class="mobile-menu-link text-3xl font-serif text-white hover:text-amber-400 transition-colors"
+                onclick="closeMobileMenu()">Accueil</a>
+            <a href="/menu"
+                class="mobile-menu-link text-3xl font-serif text-white hover:text-amber-400 transition-colors">Menu</a>
+            <a href="#vibe"
+                class="mobile-menu-link text-3xl font-serif text-white hover:text-amber-400 transition-colors"
+                onclick="closeMobileMenu()">Lounge</a>
+            <a href="#book"
+                class="mobile-menu-link text-3xl font-serif text-white hover:text-amber-400 transition-colors"
+                onclick="closeMobileMenu()">Réservation</a>
+            <a href="#contact"
+                class="mobile-menu-link text-3xl font-serif text-white hover:text-amber-400 transition-colors"
+                onclick="closeMobileMenu()">Contact</a>
+            <div class="pt-8 flex gap-4">
+                <a href="<%= restaurant.instagramUrl || '#' %>" target="_blank" rel="noopener"
+                    class="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-amber-500 transition-all">
+                    <iconify-icon icon="mdi:instagram" width="24"></iconify-icon>
+                </a>
+                <a href="<%= restaurant.facebookUrl || '#' %>" target="_blank" rel="noopener"
+                    class="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-amber-500 transition-all">
+                    <iconify-icon icon="mdi:facebook" width="24"></iconify-icon>
+                </a>
+                <a href="tel:<%= restaurant.phone %>"
+                    class="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-amber-500 transition-all">
+                    <iconify-icon icon="mdi:phone" width="24"></iconify-icon>
+                </a>
+            </div>
+            <button onclick="closeMobileMenu()" class="absolute top-8 right-8 text-white p-2">
+                <iconify-icon icon="mdi:close" width="32"></iconify-icon>
+            </button>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <section id="home" class="relative min-h-screen flex items-center justify-center overflow-hidden">
+        <!-- Dynamic Background -->
+        <div class="absolute inset-0 z-0">
+            <div class="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-[#050505] z-10"></div>
+            <!-- Image background with slow zoom effect via CSS class handled externally or static for now -->
+            <img src="<%= restaurant.heroImageUrl || 'https://images.unsplash.com/photo-1578474843222-959604192131?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80' %>"
+                alt="Ambiance Eden Garden" class="w-full h-full object-cover opacity-60 scale-105 animate-float">
+        </div>
+
+        <!-- Smoke Effect Overlay -->
+        <div class="absolute bottom-0 left-0 w-full h-1/2 bg-gradient-to-t from-[#050505] to-transparent z-10"></div>
+        <div class="absolute top-1/4 right-1/4 w-96 h-96 bg-emerald-900/20 rounded-full blur-[100px] animate-smoke z-0">
+        </div>
+        <div class="absolute bottom-1/4 left-1/4 w-96 h-96 bg-amber-600/10 rounded-full blur-[100px] animate-smoke z-0"
+            style="animation-delay: -5s;"></div>
+
+        <!-- Main Content -->
+        <div class="relative z-20 text-center px-6 max-w-5xl mx-auto mt-16">
+            <div class="reveal-text flex flex-col items-center gap-6" style="animation-delay: 0.2s;">
+                <span
+                    class="inline-block py-1 px-3 rounded-full border border-white/10 bg-white/5 backdrop-blur-md text-[10px] uppercase tracking-[0.2em] text-amber-400 mb-2">
+                    <%= restaurant.heroTagline || 'Nice Port · France' %>
+                </span>
+
+                <h1 class="text-5xl md:text-7xl lg:text-8xl font-serif text-white leading-[0.9] tracking-tight">
+                    <span class="text-gold-gradient">
+                        <%= restaurant.name || 'Eden Garden' %>
+                    </span>
+                </h1>
+
+                <p
+                    class="max-w-xl mx-auto text-sm md:text-base text-slate-300 font-light leading-relaxed mt-4 border-l border-amber-500/50 pl-4 text-left md:text-center md:border-l-0 md:pl-0">
+                    <%= restaurant.heroDescription
+                        || 'Une fusion audacieuse entre la gastronomie afro-reunionnaise et l elegance de la vie nocturne azureenne. Restaurant, Bar Lounge et Chicha Premium.'
+                        %>
+                </p>
+
+                <div class="flex flex-col sm:flex-row items-center gap-4 mt-8">
+                    <!-- Menu Button -->
+                    <a href="/menu"
+                        class="group relative px-8 py-3 overflow-hidden rounded-full bg-white text-black transition-all hover:bg-slate-200">
+                        <div
+                            class="absolute inset-0 w-3 bg-amber-500 transition-all duration-[250ms] ease-out group-hover:w-full opacity-10">
+                        </div>
+                        <span class="relative flex items-center gap-2 text-xs font-bold uppercase tracking-widest">
+                            Découvrir le Menu
+                            <iconify-icon icon="mdi:arrow-right" width="16"></iconify-icon>
+                        </span>
+                    </a>
+                    <a href="<%= restaurant.reservationExternalUrl || '#book' %>"
+                        target="<%= restaurant.reservationExternalUrl ? '_blank' : '' %>" rel="noopener"
+                        class="px-8 py-3 rounded-full border border-white/20 hover:border-white/50 text-white transition-all hover:bg-white/5">
+                        <span class="text-xs font-bold uppercase tracking-widest">Réserver une table</span>
+                    </a>
+                    <% if (restaurant.orderOnlineUrl) { %>
+                        <a href="<%= restaurant.orderOnlineUrl %>" target="_blank" rel="noopener"
+                            class="px-8 py-3 rounded-full bg-emerald-600 hover:bg-emerald-500 text-white transition-all hover:shadow-[0_0_20px_-5px_rgba(16,185,129,0.5)]">
+                            <span class="flex items-center gap-2 text-xs font-bold uppercase tracking-widest">
+                                <iconify-icon icon="mdi:shopping" width="16"></iconify-icon>
+                                Commander en ligne
+                            </span>
+                        </a>
+                        <% } %>
+                </div>
+            </div>
+        </div>
+
+        <!-- Scroll Indicator -->
+        <div
+            class="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-50 animate-bounce">
+            <span class="text-[10px] uppercase tracking-widest">Scroll</span>
+            <div class="w-px h-12 bg-gradient-to-b from-transparent via-white to-transparent"></div>
+        </div>
+    </section>
+
+    <!-- Infinite Marquee Section -->
+    <div class="relative bg-amber-500 py-3 overflow-hidden z-20 transform -rotate-1 border-y-4 border-black">
+        <div
+            class="whitespace-nowrap animate-marquee flex gap-8 items-center text-black font-bold uppercase tracking-tighter text-lg md:text-xl">
+            <span>Afro-Fusion Cuisine</span> • <span>Cocktails Signature</span> • <span>Premium Chicha</span> •
+            <span>Live Sports</span> • <span>Nice Port View</span> • <span>Hip-Hop & Afrobeat</span> • <span>Afro-Fusion
+                Cuisine</span> • <span>Cocktails Signature</span> • <span>Premium Chicha</span> • <span>Live
+                Sports</span> • <span>Nice Port View</span> • <span>Hip-Hop & Afrobeat</span> •
+        </div>
+    </div>
+
+    <!-- The Experience (Grid Layout) -->
+    <section id="vibe" class="py-24 md:py-32 relative">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid lg:grid-cols-2 gap-16 items-center">
+                <!-- Text Content -->
+                <div class="space-y-8">
+                    <div class="space-y-2">
+                        <span class="text-amber-500 text-xs font-bold tracking-widest uppercase">Cuisine Fusion</span>
+                        <h2 class="text-4xl md:text-5xl text-white leading-tight">
+                            <%= restaurant.atmosphereTitle || 'Partager n est pas un delit.' %>
+                        </h2>
+                    </div>
+                    <p class="text-slate-400 font-light leading-relaxed">
+                        <%= restaurant.atmosphereText
+                            || 'Situe dans l un des endroits les plus pittoresques de la Cote d Azur, notre restaurant vous invite a savourer une experience culinaire ou la Cote d Ivoire et l ile de la Reunion se rencontrent pour une cuisine fusion.'
+                            %>
+                    </p>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4">
+                        <div
+                            class="glass-panel p-6 rounded-2xl group hover:bg-white/5 transition-colors cursor-default">
+                            <iconify-icon icon="solar:wineglass-triangle-linear"
+                                class="text-amber-500 mb-4 text-3xl group-hover:scale-110 transition-transform"></iconify-icon>
+                            <h3 class="text-white text-lg mb-1">Bar à Cocktails</h3>
+                            <p class="text-xs text-slate-500">Créations uniques et classiques revisités.</p>
+                        </div>
+                        <div
+                            class="glass-panel p-6 rounded-2xl group hover:bg-white/5 transition-colors cursor-default">
+                            <iconify-icon icon="solar:fire-linear"
+                                class="text-amber-500 mb-4 text-3xl group-hover:scale-110 transition-transform"></iconify-icon>
+                            <h3 class="text-white text-lg mb-1">Chicha Lounge</h3>
+                            <p class="text-xs text-slate-500">Large gamme de goûts, charbons naturels.</p>
+                        </div>
+                        <div
+                            class="glass-panel p-6 rounded-2xl group hover:bg-white/5 transition-colors cursor-default">
+                            <iconify-icon icon="solar:football-linear"
+                                class="text-amber-500 mb-4 text-3xl group-hover:scale-110 transition-transform"></iconify-icon>
+                            <h3 class="text-white text-lg mb-1">Live Sports</h3>
+                            <p class="text-xs text-slate-500">Diffusion des grands événements sur écrans HD.</p>
+                        </div>
+                        <div
+                            class="glass-panel p-6 rounded-2xl group hover:bg-white/5 transition-colors cursor-default">
+                            <iconify-icon icon="solar:music-library-2-linear"
+                                class="text-amber-500 mb-4 text-3xl group-hover:scale-110 transition-transform"></iconify-icon>
+                            <h3 class="text-white text-lg mb-1">DJ Sets</h3>
+                            <p class="text-xs text-slate-500">Ambiance musicale Hip-Hop, R&B & Afro.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Abstract Visual -->
+                <div class="relative h-[600px] w-full hidden lg:block">
+                    <div
+                        class="absolute top-0 right-0 w-3/4 h-[90%] rounded-2xl overflow-hidden border border-white/10">
+                        <img src="<%= restaurant.atmosphereImage1Url || 'https://images.unsplash.com/photo-1540224871915-bc8ffb782bdf?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80' %>"
+                            alt="Bar et cocktails"
+                            class="w-full h-full object-cover hover:scale-110 transition-transform duration-1000">
+                    </div>
+                    <div
+                        class="absolute bottom-0 left-0 w-2/3 h-1/2 rounded-2xl overflow-hidden border border-white/10 shadow-2xl shadow-black z-10 glass-panel">
+                        <img src="<%= restaurant.atmosphereImage2Url || 'https://images.unsplash.com/photo-1533658510255-b46e330a9e22?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80' %>"
+                            alt="Ambiance lounge"
+                            class="w-full h-full object-cover opacity-80 mix-blend-lighten hover:scale-110 transition-transform duration-1000">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex items-end p-6">
+                            <p class="text-white font-serif text-2xl italic">"Chill vibes only"</p>
+                        </div>
+                    </div>
+                    <!-- Decorative Circle -->
+                    <div
+                        class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] border border-white/5 rounded-full pointer-events-none animate-spin-slow">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Menu Showcase (Horizontal Scroll) -->
+    <section id="menu" class="py-24 bg-[#080808] border-t border-white/5 overflow-hidden">
+        <div class="max-w-7xl mx-auto px-6 mb-12 flex flex-col md:flex-row justify-between items-end gap-6">
+            <div class="space-y-2">
+                <span class="text-emerald-500 text-xs font-bold tracking-widest uppercase">Notre Carte</span>
+                <h2 class="text-4xl text-white font-serif">Fusion Culinaires</h2>
+            </div>
+            <a href="#"
+                class="text-slate-400 hover:text-white text-xs uppercase tracking-widest border-b border-slate-600 pb-1 hover:border-white transition-all">Voir
+                tout le menu</a>
+        </div>
+
+        <!-- Scroll Container -->
+        <div class="flex overflow-x-auto gap-6 px-6 pb-12 snap-x snap-mandatory no-scrollbar">
+            <% menuItems.forEach(function(item) { %>
+                <!-- Menu Item -->
+                <div class="min-w-[300px] md:min-w-[400px] snap-center group">
+                    <div class="relative h-[500px] rounded-t-full rounded-b-lg overflow-hidden border border-white/10">
+                        <img src="<%= item.imageUrl %>"
+                            class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                        <div
+                            class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-90">
+                        </div>
+                        <div
+                            class="absolute bottom-0 left-0 w-full p-8 translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
+                            <div class="flex justify-between items-baseline mb-2">
+                                <h3 class="text-2xl font-serif text-white">
+                                    <%= item.title %>
+                                </h3>
+                                <span class="text-amber-500 font-bold">
+                                    <%= item.price %>€
+                                </span>
+                            </div>
+                            <p
+                                class="text-slate-400 text-sm opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100">
+                                <%= item.description %>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <% }); %>
+        </div>
+
+        <!-- Menu Button -->
+        <% if (restaurant.menuFullUrl) { %>
+            <div class="flex justify-center mt-8 mb-4">
+                <a href="<%= restaurant.menuFullUrl %>" target="_blank" rel="noopener"
+                    class="glass-button px-8 py-4 rounded-full text-white font-semibold uppercase tracking-widest text-sm hover:bg-white/10 transition-all hover:scale-105 flex items-center gap-3">
+                    <iconify-icon icon="mdi:silverware-fork-knife" width="20"></iconify-icon>
+                    Consulter le menu complet
+                    <iconify-icon icon="mdi:open-in-new" width="16"></iconify-icon>
+                </a>
+            </div>
+            <% } %>
+    </section>
+
+    <!-- Delivery Section -->
+    <section id="delivery" class="py-20 bg-[#050505] border-t border-white/5">
+        <div class="max-w-6xl mx-auto px-6">
+            <div class="text-center mb-12">
+                <span class="text-emerald-500 text-xs font-bold tracking-widest uppercase">Livraison</span>
+                <h2 class="text-3xl md:text-4xl font-serif text-white mt-2">Commandez depuis chez vous</h2>
+                <p class="text-slate-400 mt-4 max-w-xl mx-auto">
+                    Retrouvez nos plats sur les principales plateformes de livraison ou commandez directement.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                <!-- Uber Eats -->
+                <% if (restaurant.uberEatsUrl) { %>
+                <a href="<%= restaurant.uberEatsUrl %>" target="_blank" rel="noopener" class="group">
+                    <div class="bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-500/50 rounded-2xl p-6 flex flex-col items-center justify-center h-32 transition-all hover:scale-105">
+                        <div class="text-3xl mb-2">&#127861;</div>
+                        <span class="text-white font-medium">Uber Eats</span>
+                        <span class="text-xs text-emerald-400 mt-1">Commander</span>
+                    </div>
+                </a>
+                <% } else { %>
+                <div class="bg-white/5 border border-white/10 rounded-2xl p-6 flex flex-col items-center justify-center h-32 opacity-50">
+                    <div class="text-3xl mb-2">&#127861;</div>
+                    <span class="text-slate-400 font-medium">Uber Eats</span>
+                    <span class="text-xs text-slate-500 mt-1">Bientot</span>
+                </div>
+                <% } %>
+
+                <!-- Deliveroo -->
+                <% if (restaurant.deliverooUrl) { %>
+                <a href="<%= restaurant.deliverooUrl %>" target="_blank" rel="noopener" class="group">
+                    <div class="bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-500/50 rounded-2xl p-6 flex flex-col items-center justify-center h-32 transition-all hover:scale-105">
+                        <div class="text-3xl mb-2">&#128690;</div>
+                        <span class="text-white font-medium">Deliveroo</span>
+                        <span class="text-xs text-emerald-400 mt-1">Commander</span>
+                    </div>
+                </a>
+                <% } else { %>
+                <div class="bg-white/5 border border-white/10 rounded-2xl p-6 flex flex-col items-center justify-center h-32 opacity-50">
+                    <div class="text-3xl mb-2">&#128690;</div>
+                    <span class="text-slate-400 font-medium">Deliveroo</span>
+                    <span class="text-xs text-slate-500 mt-1">Bientot</span>
+                </div>
+                <% } %>
+
+                <!-- Click & Collect -->
+                <% if (restaurant.orderOnlineUrl) { %>
+                <a href="<%= restaurant.orderOnlineUrl %>" target="_blank" rel="noopener" class="group">
+                    <div class="bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-500/50 rounded-2xl p-6 flex flex-col items-center justify-center h-32 transition-all hover:scale-105">
+                        <iconify-icon icon="mdi:shopping-outline" width="32" class="text-emerald-400 mb-2"></iconify-icon>
+                        <span class="text-white font-medium">Click & Collect</span>
+                        <span class="text-xs text-emerald-400 mt-1">Disponible</span>
+                    </div>
+                </a>
+                <% } else { %>
+                <div class="bg-white/5 border border-white/10 rounded-2xl p-6 flex flex-col items-center justify-center h-32 opacity-50">
+                    <iconify-icon icon="mdi:shopping-outline" width="32" class="text-slate-500 mb-2"></iconify-icon>
+                    <span class="text-slate-400 font-medium">Click & Collect</span>
+                    <span class="text-xs text-slate-500 mt-1">Bientot</span>
+                </div>
+                <% } %>
+
+                <!-- WhatsApp Order -->
+                <% if (restaurant.whatsappNumber) { %>
+                <a href="https://wa.me/<%= restaurant.whatsappNumber %>?text=Bonjour, je souhaite passer une commande" target="_blank" rel="noopener" class="group">
+                    <div class="bg-[#25D366]/20 hover:bg-[#25D366]/30 border border-[#25D366]/50 rounded-2xl p-6 flex flex-col items-center justify-center h-32 transition-all hover:scale-105">
+                        <iconify-icon icon="mdi:whatsapp" width="32" class="text-[#25D366] mb-2"></iconify-icon>
+                        <span class="text-white font-medium">WhatsApp</span>
+                        <span class="text-xs text-[#25D366] mt-1">Commander</span>
+                    </div>
+                </a>
+                <% } else { %>
+                <div class="bg-white/5 border border-white/10 rounded-2xl p-6 flex flex-col items-center justify-center h-32 opacity-50">
+                    <iconify-icon icon="mdi:whatsapp" width="32" class="text-slate-500 mb-2"></iconify-icon>
+                    <span class="text-slate-400 font-medium">WhatsApp</span>
+                    <span class="text-xs text-slate-500 mt-1">Bientot</span>
+                </div>
+                <% } %>
+            </div>
+        </div>
+    </section>
+
+    <!-- Private Events Section -->
+    <section id="events" class="py-24 relative overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-b from-[#050505] via-amber-950/10 to-[#050505]"></div>
+
+        <div class="relative max-w-6xl mx-auto px-6">
+            <div class="grid lg:grid-cols-2 gap-12 items-center">
+                <!-- Image -->
+                <div class="relative">
+                    <div class="aspect-[4/3] rounded-2xl overflow-hidden border border-white/10">
+                        <img src="<%= restaurant.eventsImageUrl || 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80' %>"
+                            alt="Evenements prives"
+                            class="w-full h-full object-cover hover:scale-110 transition-transform duration-1000">
+                    </div>
+                    <div class="absolute -bottom-6 -right-6 bg-amber-500 text-black p-6 rounded-2xl shadow-2xl">
+                        <p class="text-3xl font-bold">20+</p>
+                        <p class="text-sm font-medium">Couverts en terrasse</p>
+                    </div>
+                </div>
+
+                <!-- Content -->
+                <div class="space-y-6">
+                    <span class="text-amber-500 text-xs font-bold tracking-widest uppercase">Evenements Prives</span>
+                    <h2 class="text-3xl md:text-4xl font-serif text-white leading-tight">
+                        <%= restaurant.eventsTitle || 'Privatisez l\'Eden pour vos moments uniques' %>
+                    </h2>
+                    <p class="text-slate-400 leading-relaxed">
+                        <%= restaurant.eventsDescription || 'Anniversaires, afterworks, soirees privees, evenements d\'entreprise... Notre equipe vous accompagne pour creer une experience sur mesure dans un cadre exceptionnel face au Port de Nice.' %>
+                    </p>
+
+                    <div class="grid grid-cols-2 gap-4 py-4">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-full bg-amber-500/20 flex items-center justify-center">
+                                <iconify-icon icon="mdi:account-group" width="20" class="text-amber-400"></iconify-icon>
+                            </div>
+                            <span class="text-sm text-slate-300">Jusqu'a <%= restaurant.eventsCapacity || '50' %> personnes</span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-full bg-amber-500/20 flex items-center justify-center">
+                                <iconify-icon icon="mdi:silverware-variant" width="20" class="text-amber-400"></iconify-icon>
+                            </div>
+                            <span class="text-sm text-slate-300">Menu personnalise</span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-full bg-amber-500/20 flex items-center justify-center">
+                                <iconify-icon icon="mdi:music" width="20" class="text-amber-400"></iconify-icon>
+                            </div>
+                            <span class="text-sm text-slate-300">DJ & ambiance</span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-full bg-amber-500/20 flex items-center justify-center">
+                                <iconify-icon icon="mdi:television" width="20" class="text-amber-400"></iconify-icon>
+                            </div>
+                            <span class="text-sm text-slate-300">Ecrans pour projections</span>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col sm:flex-row gap-4 pt-4">
+                        <% if (restaurant.whatsappNumber) { %>
+                        <a href="https://wa.me/<%= restaurant.whatsappNumber %>?text=Bonjour, je souhaite organiser un evenement prive"
+                            target="_blank" rel="noopener"
+                            class="inline-flex items-center justify-center gap-2 px-6 py-3 bg-amber-600 hover:bg-amber-500 text-white font-bold rounded-full transition-all hover:shadow-[0_0_20px_-5px_rgba(217,119,6,0.5)]">
+                            <iconify-icon icon="mdi:whatsapp" width="20"></iconify-icon>
+                            Demander un devis
+                        </a>
+                        <% } %>
+                        <a href="tel:<%= restaurant.phone %>"
+                            class="inline-flex items-center justify-center gap-2 px-6 py-3 border border-white/20 hover:border-white/50 text-white rounded-full transition-all hover:bg-white/5">
+                            <iconify-icon icon="mdi:phone" width="20"></iconify-icon>
+                            Nous appeler
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Google Maps Section -->
+    <section class="py-16 bg-[#080808] border-t border-white/5">
+        <div class="max-w-6xl mx-auto px-6">
+            <div class="text-center mb-8">
+                <span class="text-amber-500 text-xs font-bold tracking-widest uppercase">Localisation</span>
+                <h2 class="text-2xl font-serif text-white mt-2">Nous trouver</h2>
+            </div>
+            <div class="aspect-[21/9] rounded-2xl overflow-hidden border border-white/10">
+                <% if (restaurant.mapEmbedUrl) { %>
+                <iframe
+                    src="<%= restaurant.mapEmbedUrl %>"
+                    width="100%"
+                    height="100%"
+                    style="border:0; filter: grayscale(100%) invert(92%) contrast(83%);"
+                    allowfullscreen=""
+                    loading="lazy"
+                    referrerpolicy="no-referrer-when-downgrade"
+                    title="<%= restaurant.name || 'Eden Garden' %> - Carte">
+                </iframe>
+                <% } else { %>
+                <div class="w-full h-full bg-white/5 flex items-center justify-center">
+                    <div class="text-center">
+                        <iconify-icon icon="mdi:map-marker" width="48" class="text-slate-600"></iconify-icon>
+                        <p class="text-slate-500 mt-2">Carte non configuree</p>
+                        <a href="<%= restaurant.mapUrl || 'https://maps.google.com/?q=30+Quai+Lunel+06300+Nice' %>"
+                            target="_blank" rel="noopener"
+                            class="text-amber-500 hover:text-amber-400 text-sm mt-2 inline-block">
+                            Voir sur Google Maps
+                        </a>
+                    </div>
+                </div>
+                <% } %>
+            </div>
+            <div class="flex flex-col md:flex-row items-center justify-center gap-6 mt-6 text-sm text-slate-400">
+                <a href="<%= restaurant.mapUrl || 'https://maps.google.com/?q=30+Quai+Lunel+06300+Nice' %>"
+                    target="_blank" rel="noopener"
+                    class="flex items-center gap-2 hover:text-amber-400 transition-colors">
+                    <iconify-icon icon="mdi:directions" width="18"></iconify-icon>
+                    Obtenir l'itineraire
+                </a>
+                <span class="hidden md:inline text-slate-600">|</span>
+                <span class="flex items-center gap-2">
+                    <iconify-icon icon="mdi:map-marker" width="18" class="text-amber-500"></iconify-icon>
+                    <%= restaurant.address || '30 Quai Lunel' %>, <%= restaurant.postalCode || '06300' %> <%= restaurant.city || 'Nice' %>
+                </span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Reservation / Call to Action -->
+    <section id="book" class="relative py-32 flex items-center justify-center overflow-hidden">
+        <!-- Abstract Background -->
+        <div class="absolute inset-0 bg-[#050505]">
+            <div
+                class="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-amber-900/20 via-[#050505] to-[#050505]">
+            </div>
+            <div
+                class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] border border-white/5 rounded-full opacity-20">
+            </div>
+            <div
+                class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] border border-white/5 rounded-full opacity-30">
+            </div>
+        </div>
+
+        <div class="relative z-10 w-full max-w-4xl mx-6">
+            <div class="glass-panel p-1 rounded-3xl">
+                <div class="bg-[#0a0a0a]/80 backdrop-blur-xl rounded-[20px] p-8 md:p-12 border border-white/5">
+                    <div class="grid md:grid-cols-2 gap-12">
+                        <div class="space-y-6">
+                            <h2 class="text-3xl font-serif text-white">Réserver une table</h2>
+                            <p class="text-slate-400 text-sm leading-relaxed">
+                                <%= restaurant.reservationText
+                                    || 'Pour le diner ou pour le lounge, assurez-vous d avoir la meilleure place. Reservation instantanee sans prepaiement.'
+                                    %>
+                            </p>
+
+                            <div class="space-y-4 pt-4">
+                                <div class="flex items-center gap-4 text-sm text-slate-300">
+                                    <div
+                                        class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-amber-500">
+                                        <iconify-icon icon="mdi:map-marker" width="20"></iconify-icon>
+                                    </div>
+                                    <div>
+                                        <span class="block text-white font-medium">
+                                            <%= restaurant.address || '30 Quai Lunel' %>
+                                        </span>
+                                        <span class="text-xs text-slate-500">
+                                            <%= restaurant.postalCode || '06300' %>
+                                                <%= restaurant.city || 'Nice' %>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="flex items-center gap-4 text-sm text-slate-300">
+                                    <div
+                                        class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-amber-500">
+                                        <iconify-icon icon="mdi:phone" width="20"></iconify-icon>
+                                    </div>
+                                    <div>
+                                        <span class="block text-white font-medium">
+                                            <%= restaurant.phone || '' %>
+                                        </span>
+                                        <span class="text-xs text-slate-500">
+                                            <%= restaurant.openingHours || 'Mer-Dim: 12h00-23h30' %>
+                                        </span>
+                                    </div>
+                                </div>
+                                <% if (restaurant.email) { %>
+                                    <div class="flex items-center gap-4 text-sm text-slate-300">
+                                        <div
+                                            class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-amber-500">
+                                            <iconify-icon icon="mdi:email" width="20"></iconify-icon>
+                                        </div>
+                                        <div>
+                                            <a href="mailto:<%= restaurant.email %>"
+                                                class="block text-white font-medium hover:text-amber-400 transition-colors">
+                                                <%= restaurant.email %>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <% } %>
+                            </div>
+                        </div>
+
+                        <form id="reservationForm" class="space-y-4">
+                            <div class="grid grid-cols-2 gap-4">
+                                <div class="space-y-1">
+                                    <label class="text-[10px] uppercase tracking-wider text-slate-500">Date</label>
+                                    <input type="date" id="resDate"
+                                        class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-sm text-white focus:outline-none focus:border-amber-500 transition-colors [color-scheme:dark]">
+                                </div>
+                                <div class="space-y-1">
+                                    <label class="text-[10px] uppercase tracking-wider text-slate-500">Heure</label>
+                                    <input type="time" id="resTime"
+                                        class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-sm text-white focus:outline-none focus:border-amber-500 transition-colors [color-scheme:dark]">
+                                </div>
+                            </div>
+                            <div class="space-y-1">
+                                <label class="text-[10px] uppercase tracking-wider text-slate-500">Personnes</label>
+                                <select id="resPersons"
+                                    class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-sm text-white focus:outline-none focus:border-amber-500 transition-colors [&>option]:bg-black">
+                                    <option value="2">2 Personnes</option>
+                                    <option value="3">3 Personnes</option>
+                                    <option value="4">4 Personnes</option>
+                                    <option value="5+">5+ Personnes</option>
+                                </select>
+                            </div>
+                            <% if (restaurant.whatsappNumber) { %>
+                            <button type="button" id="submitReservation"
+                                class="w-full py-4 mt-2 bg-gradient-to-r from-amber-600 to-amber-500 text-white font-bold text-xs uppercase tracking-widest rounded-lg hover:shadow-[0_0_30px_-5px_rgba(217,119,6,0.4)] transition-all transform hover:-translate-y-1">
+                                Envoyer la demande via WhatsApp
+                            </button>
+                            <% } else if (restaurant.reservationExternalUrl) { %>
+                            <a href="<%= restaurant.reservationExternalUrl %>" target="_blank" rel="noopener"
+                                class="block w-full py-4 mt-2 bg-gradient-to-r from-amber-600 to-amber-500 text-white font-bold text-xs uppercase tracking-widest rounded-lg hover:shadow-[0_0_30px_-5px_rgba(217,119,6,0.4)] transition-all transform hover:-translate-y-1 text-center">
+                                Reserver maintenant
+                            </a>
+                            <% } else { %>
+                            <button type="button" disabled
+                                class="w-full py-4 mt-2 bg-gray-600 text-gray-400 font-bold text-xs uppercase tracking-widest rounded-lg cursor-not-allowed">
+                                Reservation par telephone
+                            </button>
+                            <% } %>
+                            <p class="text-xs text-slate-500 text-center mt-3">
+                                Votre demande de reservation sera confirmee rapidement par telephone ou SMS.
+                            </p>
+                        </form>
+
+                        <!-- WhatsApp & FoodBooking -->
+                        <div class="mt-6 pt-6 border-t border-white/10 space-y-4">
+                            <% if (restaurant.whatsappNumber) { %>
+                                <a href="https://wa.me/<%= restaurant.whatsappNumber %>?text=Bonjour, je souhaite reserver une table"
+                                    target="_blank" rel="noopener"
+                                    class="w-full py-4 bg-[#25D366] text-white font-bold text-xs uppercase tracking-widest rounded-lg hover:bg-[#20BA5A] transition-all flex items-center justify-center gap-3">
+                                    <iconify-icon icon="mdi:whatsapp" width="20"></iconify-icon>
+                                    Reserver par WhatsApp
+                                </a>
+                                <% } %>
+
+                                    <% if (restaurant.reservationExternalUrl) { %>
+                                        <a href="<%= restaurant.reservationExternalUrl %>" target="_blank"
+                                            rel="noopener"
+                                            class="block text-center text-xs text-slate-400 hover:text-amber-400 transition-colors underline">
+                                            Vous preferez une confirmation immediate ? Reservez via FoodBooking
+                                        </a>
+                                        <% } %>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer Complete -->
+    <footer id="contact" class="bg-black border-t border-white/5 relative z-20">
+        <div class="max-w-6xl mx-auto px-6 py-16">
+            <div class="grid md:grid-cols-4 gap-12">
+                <!-- Brand -->
+                <div class="md:col-span-1">
+                    <h2 class="text-2xl font-serif text-white tracking-widest mb-4">
+                        <span class="text-amber-500">Eden</span> Garden
+                    </h2>
+                    <p class="text-sm text-slate-500 leading-relaxed">
+                        <%= restaurant.heroTagline || 'Restaurant | Bar | Chicha' %>
+                    </p>
+                </div>
+
+                <!-- Contact -->
+                <div>
+                    <h3 class="text-xs font-bold uppercase tracking-widest text-white mb-4">Contact</h3>
+                    <div class="space-y-3 text-sm text-slate-400">
+                        <a href="tel:<%= restaurant.phone %>"
+                            class="flex items-center gap-3 hover:text-amber-400 transition-colors">
+                            <iconify-icon icon="mdi:phone" width="18" class="text-amber-500"></iconify-icon>
+                            <%= restaurant.phone || '06 52 82 64 30' %>
+                        </a>
+                        <% if (restaurant.email) { %>
+                            <a href="mailto:<%= restaurant.email %>"
+                                class="flex items-center gap-3 hover:text-amber-400 transition-colors">
+                                <iconify-icon icon="mdi:email" width="18" class="text-amber-500"></iconify-icon>
+                                <%= restaurant.email %>
+                            </a>
+                            <% } %>
+                                <a href="<%= restaurant.mapUrl || '#' %>" target="_blank" rel="noopener"
+                                    class="flex items-start gap-3 hover:text-amber-400 transition-colors">
+                                    <iconify-icon icon="mdi:map-marker" width="18"
+                                        class="text-amber-500 mt-0.5"></iconify-icon>
+                                    <span>
+                                        <%= restaurant.address || '30 Quai Lunel' %><br>
+                                            <%= restaurant.postalCode || '06300' %>
+                                                <%= restaurant.city || 'Nice' %>
+                                    </span>
+                                </a>
+                    </div>
+                </div>
+
+                <!-- Horaires -->
+                <div>
+                    <h3 class="text-xs font-bold uppercase tracking-widest text-white mb-4">Horaires</h3>
+                    <div class="space-y-2 text-sm text-slate-400">
+                        <div class="flex items-center gap-3">
+                            <iconify-icon icon="mdi:clock-outline" width="18" class="text-amber-500"></iconify-icon>
+                            <span>
+                                <%= restaurant.openingHours || 'Mer-Dim: 12h00-23h30' %>
+                            </span>
+                        </div>
+                        <p class="text-xs text-slate-600 mt-2">Lundi & Mardi : Fermé</p>
+                    </div>
+                </div>
+
+                <!-- Links -->
+                <div>
+                    <h3 class="text-xs font-bold uppercase tracking-widest text-white mb-4">Liens Rapides</h3>
+                    <div class="space-y-3 text-sm text-slate-400">
+                        <a href="/menu" class="block hover:text-amber-400 transition-colors">Notre Menu</a>
+                        <a href="<%= restaurant.reservationExternalUrl || '#' %>" target="_blank" rel="noopener"
+                            class="block hover:text-amber-400 transition-colors">Réserver une table</a>
+                        <a href="<%= restaurant.orderOnlineUrl || '#' %>" target="_blank" rel="noopener"
+                            class="block hover:text-amber-400 transition-colors">Commander en ligne</a>
+                    </div>
+                    <div class="flex gap-4 mt-6">
+                        <a href="<%= restaurant.instagramUrl || '#' %>" target="_blank" rel="noopener"
+                            class="w-10 h-10 rounded-full border border-amber-500/50 bg-amber-500/10 flex items-center justify-center text-amber-400 hover:text-white hover:bg-amber-500 hover:border-amber-500 transition-all hover:scale-110">
+                            <iconify-icon icon="mdi:instagram" width="20"></iconify-icon>
+                        </a>
+                        <a href="<%= restaurant.facebookUrl || '#' %>" target="_blank" rel="noopener"
+                            class="w-10 h-10 rounded-full border border-amber-500/50 bg-amber-500/10 flex items-center justify-center text-amber-400 hover:text-white hover:bg-amber-500 hover:border-amber-500 transition-all hover:scale-110">
+                            <iconify-icon icon="mdi:facebook" width="20"></iconify-icon>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Copyright & Legal -->
+            <div class="mt-12 pt-8 border-t border-white/5">
+                <div class="flex flex-col md:flex-row items-center justify-between gap-4">
+                    <p class="text-[10px] uppercase tracking-widest text-slate-600">
+                        &copy; 2025 <%= restaurant.name || 'Eden Garden Nice' %>. Tous droits reserves.
+                    </p>
+                    <div class="flex gap-6 text-[10px] uppercase tracking-widest text-slate-600">
+                        <a href="/mentions-legales" class="hover:text-amber-400 transition-colors">Mentions legales</a>
+                        <a href="/confidentialite" class="hover:text-amber-400 transition-colors">Confidentialite</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        // Mobile menu toggle
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+
+        function openMobileMenu() {
+            mobileMenu.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeMobileMenu() {
+            mobileMenu.classList.add('hidden');
+            document.body.style.overflow = '';
+        }
+
+        if (mobileMenuBtn) {
+            mobileMenuBtn.addEventListener('click', function () {
+                if (mobileMenu.classList.contains('hidden')) {
+                    openMobileMenu();
+                } else {
+                    closeMobileMenu();
+                }
+            });
+        }
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                const href = this.getAttribute('href');
+                if (href !== '#') {
+                    e.preventDefault();
+                    const target = document.querySelector(href);
+                    if (target) {
+                        target.scrollIntoView({ behavior: 'smooth' });
+                    }
+                }
+            });
+        });
+
+        // Reservation form WhatsApp integration
+        <% if (restaurant.whatsappNumber) { %>
+        const submitBtn = document.getElementById('submitReservation');
+        if (submitBtn) {
+            submitBtn.addEventListener('click', function() {
+                const date = document.getElementById('resDate').value;
+                const time = document.getElementById('resTime').value;
+                const persons = document.getElementById('resPersons').value;
+
+                let message = 'Bonjour, je souhaite reserver une table';
+                if (date) {
+                    const dateObj = new Date(date);
+                    const formattedDate = dateObj.toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' });
+                    message += ' pour le ' + formattedDate;
+                }
+                if (time) {
+                    message += ' a ' + time;
+                }
+                if (persons) {
+                    message += ' pour ' + persons + ' personne(s)';
+                }
+                message += '. Merci!';
+
+                const whatsappUrl = 'https://wa.me/<%= restaurant.whatsappNumber %>?text=' + encodeURIComponent(message);
+                window.open(whatsappUrl, '_blank');
+            });
+        }
+        <% } %>
+
+        // Scroll reveal animation
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.glass-panel').forEach((el, index) => {
+            if (!el.closest('#mobileMenu')) {
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(30px)';
+                el.style.transition = `all 0.8s cubic-bezier(0.16, 1, 0.3, 1) ${index * 0.1}s`;
+                observer.observe(el);
+            }
+        });
+
+        // Cookie consent banner
+        (function() {
+            if (localStorage.getItem('cookieConsent')) return;
+
+            const banner = document.createElement('div');
+            banner.id = 'cookieBanner';
+            banner.className = 'fixed bottom-0 left-0 right-0 z-50 p-4 bg-black/95 backdrop-blur-lg border-t border-white/10';
+            banner.innerHTML = `
+                <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+                    <p class="text-sm text-slate-400 text-center md:text-left">
+                        Ce site utilise des cookies pour ameliorer votre experience.
+                        <a href="/confidentialite" class="text-amber-500 hover:text-amber-400 underline">En savoir plus</a>
+                    </p>
+                    <div class="flex gap-3">
+                        <button onclick="refuseCookies()" class="px-4 py-2 text-sm text-slate-400 hover:text-white transition-colors">
+                            Refuser
+                        </button>
+                        <button onclick="acceptCookies()" class="px-6 py-2 bg-amber-600 hover:bg-amber-500 text-white text-sm font-bold rounded-full transition-colors">
+                            Accepter
+                        </button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(banner);
+        })();
+
+        function acceptCookies() {
+            localStorage.setItem('cookieConsent', 'accepted');
+            document.getElementById('cookieBanner')?.remove();
+        }
+
+        function refuseCookies() {
+            localStorage.setItem('cookieConsent', 'refused');
+            document.getElementById('cookieBanner')?.remove();
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Informations Restaurant - Eden Garden Admin</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-900 min-h-screen">
+    <!-- Header -->
+    <header class="bg-gray-800 border-b border-gray-700">
+        <div class="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
+            <div class="flex items-center gap-4">
+                <a href="/admin" class="text-xl font-bold text-white hover:text-amber-400 transition-colors">🌿 Eden
+                    Garden</a>
+                <span class="text-gray-500">|</span>
+                <span class="text-gray-400">Informations Restaurant</span>
+            </div>
+            <a href="/admin/logout" class="text-red-400 hover:text-red-300 text-sm transition-colors">
+                Déconnexion
+            </a>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-4xl mx-auto px-4 py-8">
+        <div class="flex items-center justify-between mb-8">
+            <h2 class="text-2xl font-bold text-white">Informations du Restaurant</h2>
+            <a href="/admin" class="text-gray-400 hover:text-white text-sm transition-colors">← Retour au dashboard</a>
+        </div>
+
+        <% if (success) { %>
+            <div class="bg-emerald-500/10 border border-emerald-500/50 text-emerald-400 px-4 py-3 rounded-lg mb-6">
+                ✓ Informations mises à jour avec succès
+            </div>
+            <% } %>
+
+                <form method="POST" action="/admin/restaurant" class="space-y-8">
+                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                    <!-- General Info -->
+                    <div class="bg-gray-800 rounded-xl p-6 border border-gray-700">
+                        <h3 class="text-lg font-bold text-white mb-4">📍 Coordonnées</h3>
+                        <div class="grid md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-300 mb-2">Nom du restaurant</label>
+                                <input type="text" name="name" value="<%= restaurant.name || '' %>"
+                                    class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-amber-500">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-300 mb-2">Téléphone <span
+                                        class="text-gray-500">(lecture seule)</span></label>
+                                <input type="text" value="<%= restaurant.phone || '' %>" disabled
+                                    class="w-full px-4 py-3 bg-gray-600 border border-gray-500 rounded-lg text-gray-400 cursor-not-allowed">
+                                <input type="hidden" name="phone" value="<%= restaurant.phone || '' %>">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-300 mb-2">Email de contact</label>
+                                <input type="email" name="email" value="<%= restaurant.email || '' %>"
+                                    class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-amber-500"
+                                    placeholder="contact@edengarden.fr">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-300 mb-2">Adresse</label>
+                                <input type="text" name="address" value="<%= restaurant.address || '' %>"
+                                    class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-amber-500">
+                            </div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-300 mb-2">Code Postal</label>
+                                    <input type="text" name="postalCode" value="<%= restaurant.postalCode || '' %>"
+                                        class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-amber-500">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-300 mb-2">Ville</label>
+                                    <input type="text" name="city" value="<%= restaurant.city || '' %>"
+                                        class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-amber-500">
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-300 mb-2">Horaires d'ouverture</label>
+                                <textarea name="openingHours" rows="2"
+                                    class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-amber-500"
+                                    placeholder="Mer-Dim: 12h00-23h30 | Lun-Mar: Fermé"><%= restaurant.openingHours || '' %></textarea>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-300 mb-2">Lien WhatsApp
+                                    (optionnel)</label>
+                                <input type="text" name="whatsappLink" value="<%= restaurant.whatsappLink || '' %>"
+                                    class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-amber-500"
+                                    placeholder="https://wa.me/33612345678">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Hero Section -->
+                    <div class="bg-gray-800 rounded-xl p-6 border border-gray-700">
+                        <h3 class="text-lg font-bold text-white mb-4">🏠 Section Hero (Accueil)</h3>
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-300 mb-2">Tagline (petite ligne
+                                    au-dessus du titre)</label>
+                                <input type="text" name="heroTagline" value="<%= restaurant.heroTagline || '' %>"
+                                    class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-amber-500"
+                                    placeholder="ex: Nice Port · France">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-300 mb-2">Description Hero</label>
+                                <textarea name="heroDescription" rows="3"
+                                    class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-amber-500"
+                                    placeholder="Description principale affichée dans la section d'accueil"><%= restaurant.heroDescription || '' %></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Atmosphere Section -->
+                    <div class="bg-gray-800 rounded-xl p-6 border border-gray-700">
+                        <h3 class="text-lg font-bold text-white mb-4">✨ Section Atmosphère</h3>
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-300 mb-2">Titre Atmosphère</label>
+                                <input type="text" name="atmosphereTitle"
+                                    value="<%= restaurant.atmosphereTitle || '' %>"
+                                    class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-amber-500"
+                                    placeholder="ex: Plus qu'un restaurant,">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-300 mb-2">Texte Atmosphère</label>
+                                <textarea name="atmosphereText" rows="4"
+                                    class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-amber-500"
+                                    placeholder="Description de l'ambiance et de l'expérience"><%= restaurant.atmosphereText || '' %></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Reservation Section -->
+                    <div class="bg-gray-800 rounded-xl p-6 border border-gray-700">
+                        <h3 class="text-lg font-bold text-white mb-4">📅 Section Réservation</h3>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-300 mb-2">Texte de réservation</label>
+                            <textarea name="reservationText" rows="3"
+                                class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-amber-500"
+                                placeholder="Texte affiché dans la section réservation"><%= restaurant.reservationText || '' %></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Social Links -->
+                    <div class="bg-gray-800 rounded-xl p-6 border border-gray-700">
+                        <h3 class="text-lg font-bold text-white mb-4">🔗 Réseaux Sociaux</h3>
+                        <div class="grid md:grid-cols-3 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-300 mb-2">Instagram URL</label>
+                                <input type="text" name="instagramUrl" value="<%= restaurant.instagramUrl || '' %>"
+                                    class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-amber-500"
+                                    placeholder="https://instagram.com/...">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-300 mb-2">Facebook URL</label>
+                                <input type="text" name="facebookUrl" value="<%= restaurant.facebookUrl || '' %>"
+                                    class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-amber-500"
+                                    placeholder="https://facebook.com/...">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-300 mb-2">Google Maps URL</label>
+                                <input type="text" name="mapUrl" value="<%= restaurant.mapUrl || '' %>"
+                                    class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-amber-500"
+                                    placeholder="https://maps.google.com/...">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- External URLs -->
+                    <div class="bg-gray-800 rounded-xl p-6 border border-gray-700">
+                        <h3 class="text-lg font-bold text-white mb-4">&#128279; Liens Externes</h3>
+                        <div class="grid md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-300 mb-2">URL Menu Complet
+                                    (Heyzine)</label>
+                                <input type="text" name="menuFullUrl" value="<%= restaurant.menuFullUrl || '' %>"
+                                    class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-amber-500"
+                                    placeholder="https://heyzine.com/flip-book/...">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-300 mb-2">URL Commande en
+                                    ligne</label>
+                                <input type="text" name="orderOnlineUrl" value="<%= restaurant.orderOnlineUrl || '' %>"
+                                    class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-amber-500"
+                                    placeholder="https://www.foodbooking.com/...">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-300 mb-2">URL Reservation
+                                    FoodBooking</label>
+                                <input type="text" name="reservationExternalUrl"
+                                    value="<%= restaurant.reservationExternalUrl || '' %>"
+                                    class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-amber-500"
+                                    placeholder="https://www.foodbooking.com/...reservation=true">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-300 mb-2">Numero WhatsApp (format
+                                    international)</label>
+                                <input type="text" name="whatsappNumber" value="<%= restaurant.whatsappNumber || '' %>"
+                                    class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-amber-500"
+                                    placeholder="33652826430">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Delivery Platforms -->
+                    <div class="bg-gray-800 rounded-xl p-6 border border-gray-700">
+                        <h3 class="text-lg font-bold text-white mb-4">&#128666; Livraison</h3>
+                        <div class="grid md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-300 mb-2">URL Uber Eats</label>
+                                <input type="text" name="uberEatsUrl" value="<%= restaurant.uberEatsUrl || '' %>"
+                                    class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-amber-500"
+                                    placeholder="https://www.ubereats.com/...">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-300 mb-2">URL Deliveroo</label>
+                                <input type="text" name="deliverooUrl" value="<%= restaurant.deliverooUrl || '' %>"
+                                    class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-amber-500"
+                                    placeholder="https://deliveroo.fr/...">
+                            </div>
+                        </div>
+                        <p class="text-xs text-gray-500 mt-3">Laissez vide si le service n'est pas encore disponible.</p>
+                    </div>
+
+                    <!-- Private Events -->
+                    <div class="bg-gray-800 rounded-xl p-6 border border-gray-700">
+                        <h3 class="text-lg font-bold text-white mb-4">&#127881; Evenements Prives</h3>
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-300 mb-2">Titre de la section</label>
+                                <input type="text" name="eventsTitle" value="<%= restaurant.eventsTitle || '' %>"
+                                    class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-amber-500"
+                                    placeholder="Privatisez l'Eden pour vos moments uniques">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-300 mb-2">Description</label>
+                                <textarea name="eventsDescription" rows="3"
+                                    class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-amber-500"
+                                    placeholder="Anniversaires, afterworks, soirees privees..."><%= restaurant.eventsDescription || '' %></textarea>
+                            </div>
+                            <div class="w-1/3">
+                                <label class="block text-sm font-medium text-gray-300 mb-2">Capacite max (personnes)</label>
+                                <input type="text" name="eventsCapacity" value="<%= restaurant.eventsCapacity || '50' %>"
+                                    class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-amber-500"
+                                    placeholder="50">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Google Maps -->
+                    <div class="bg-gray-800 rounded-xl p-6 border border-gray-700">
+                        <h3 class="text-lg font-bold text-white mb-4">&#128205; Google Maps</h3>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-300 mb-2">URL d'integration Google Maps</label>
+                            <input type="text" name="mapEmbedUrl" value="<%= restaurant.mapEmbedUrl || '' %>"
+                                class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-amber-500"
+                                placeholder="https://www.google.com/maps/embed?pb=...">
+                            <p class="text-xs text-gray-500 mt-2">
+                                Pour obtenir cette URL : Google Maps > Partager > Integrer une carte > Copier l'URL du src de l'iframe
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Images -->
+                    <div class="bg-gray-800 rounded-xl p-6 border border-gray-700">
+                        <h3 class="text-lg font-bold text-white mb-4">&#128247; Images du site</h3>
+                        <p class="text-sm text-gray-400 mb-6">Gerez toutes les images affichees sur le site. Utilisez des URLs d'images (Unsplash, Imgur, ou votre hebergement).</p>
+
+                        <div class="space-y-6">
+                            <!-- Hero Image -->
+                            <div class="grid md:grid-cols-3 gap-4 items-start">
+                                <div class="md:col-span-2">
+                                    <label class="block text-sm font-medium text-gray-300 mb-2">Image Hero (banniere principale)</label>
+                                    <input type="text" name="heroImageUrl" value="<%= restaurant.heroImageUrl || '' %>"
+                                        class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-amber-500"
+                                        placeholder="https://images.unsplash.com/...">
+                                    <p class="text-xs text-gray-500 mt-1">Image de fond de la section d'accueil (recommande: 2000x1200px)</p>
+                                </div>
+                                <div class="hidden md:block">
+                                    <% if (restaurant.heroImageUrl) { %>
+                                        <img src="<%= restaurant.heroImageUrl %>" alt="Hero preview" class="w-full h-20 object-cover rounded-lg border border-gray-600">
+                                    <% } else { %>
+                                        <div class="w-full h-20 bg-gray-700 rounded-lg border border-gray-600 flex items-center justify-center text-gray-500 text-xs">Apercu</div>
+                                    <% } %>
+                                </div>
+                            </div>
+
+                            <!-- Atmosphere Images -->
+                            <div class="grid md:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-300 mb-2">Image Atmosphere 1 (cocktail/bar)</label>
+                                    <input type="text" name="atmosphereImage1Url" value="<%= restaurant.atmosphereImage1Url || '' %>"
+                                        class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-amber-500"
+                                        placeholder="https://...">
+                                    <% if (restaurant.atmosphereImage1Url) { %>
+                                        <img src="<%= restaurant.atmosphereImage1Url %>" alt="Preview" class="w-full h-16 object-cover rounded-lg mt-2 border border-gray-600">
+                                    <% } %>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-300 mb-2">Image Atmosphere 2 (chicha/ambiance)</label>
+                                    <input type="text" name="atmosphereImage2Url" value="<%= restaurant.atmosphereImage2Url || '' %>"
+                                        class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-amber-500"
+                                        placeholder="https://...">
+                                    <% if (restaurant.atmosphereImage2Url) { %>
+                                        <img src="<%= restaurant.atmosphereImage2Url %>" alt="Preview" class="w-full h-16 object-cover rounded-lg mt-2 border border-gray-600">
+                                    <% } %>
+                                </div>
+                            </div>
+
+                            <!-- Events Image -->
+                            <div class="grid md:grid-cols-3 gap-4 items-start">
+                                <div class="md:col-span-2">
+                                    <label class="block text-sm font-medium text-gray-300 mb-2">Image Evenements Prives</label>
+                                    <input type="text" name="eventsImageUrl" value="<%= restaurant.eventsImageUrl || '' %>"
+                                        class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-amber-500"
+                                        placeholder="https://...">
+                                    <p class="text-xs text-gray-500 mt-1">Image de la section evenements prives</p>
+                                </div>
+                                <div class="hidden md:block">
+                                    <% if (restaurant.eventsImageUrl) { %>
+                                        <img src="<%= restaurant.eventsImageUrl %>" alt="Events preview" class="w-full h-20 object-cover rounded-lg border border-gray-600">
+                                    <% } else { %>
+                                        <div class="w-full h-20 bg-gray-700 rounded-lg border border-gray-600 flex items-center justify-center text-gray-500 text-xs">Apercu</div>
+                                    <% } %>
+                                </div>
+                            </div>
+
+                            <!-- Logo -->
+                            <div class="grid md:grid-cols-3 gap-4 items-start">
+                                <div class="md:col-span-2">
+                                    <label class="block text-sm font-medium text-gray-300 mb-2">Logo du restaurant (optionnel)</label>
+                                    <input type="text" name="logoUrl" value="<%= restaurant.logoUrl || '' %>"
+                                        class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-amber-500"
+                                        placeholder="https://...">
+                                    <p class="text-xs text-gray-500 mt-1">Logo transparent PNG recommande</p>
+                                </div>
+                                <div class="hidden md:block">
+                                    <% if (restaurant.logoUrl) { %>
+                                        <img src="<%= restaurant.logoUrl %>" alt="Logo preview" class="w-full h-20 object-contain rounded-lg border border-gray-600 bg-white/10 p-2">
+                                    <% } else { %>
+                                        <div class="w-full h-20 bg-gray-700 rounded-lg border border-gray-600 flex items-center justify-center text-gray-500 text-xs">Apercu</div>
+                                    <% } %>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Submit -->
+                    <div class="flex justify-end gap-4">
+                        <a href="/admin"
+                            class="px-6 py-3 bg-gray-700 text-white rounded-lg hover:bg-gray-600 transition-colors">
+                            Annuler
+                        </a>
+                        <button type="submit"
+                            class="px-6 py-3 bg-amber-600 text-white font-bold rounded-lg hover:bg-amber-500 transition-colors">
+                            Enregistrer les modifications
+                        </button>
+                    </div>
+                </form>
+    </main>
+</body>
+
+</html>

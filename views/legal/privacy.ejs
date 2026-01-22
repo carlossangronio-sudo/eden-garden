@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Politique de Confidentialite - <%= restaurant.name || 'Eden Garden' %></title>
+    <meta name="robots" content="noindex">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap');
+        h1, h2, h3 { font-family: 'Playfair Display', serif; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    </style>
+</head>
+
+<body class="bg-[#050505] text-slate-300 min-h-screen">
+    <!-- Navigation -->
+    <nav class="bg-black/50 backdrop-blur-md border-b border-white/10">
+        <div class="max-w-4xl mx-auto px-6 py-4 flex items-center justify-between">
+            <a href="/" class="text-xl font-semibold text-white">
+                <span class="text-amber-500">Eden</span> Garden
+            </a>
+            <a href="/" class="text-sm text-slate-400 hover:text-white transition-colors">
+                Retour au site
+            </a>
+        </div>
+    </nav>
+
+    <!-- Content -->
+    <main class="max-w-4xl mx-auto px-6 py-16">
+        <h1 class="text-4xl text-white mb-8">Politique de Confidentialite</h1>
+
+        <div class="space-y-8 text-slate-400 leading-relaxed">
+            <!-- Introduction -->
+            <section class="bg-white/5 rounded-2xl p-6 border border-white/10">
+                <h2 class="text-xl text-white mb-4">1. Introduction</h2>
+                <p>
+                    <strong class="text-white"><%= restaurant.name || 'Eden Garden' %></strong> (ci-apres "nous", "notre" ou "le Restaurant"),
+                    situe au <%= restaurant.address || '30 Quai Lunel' %>, <%= restaurant.postalCode || '06300' %> <%= restaurant.city || 'Nice' %>,
+                    s'engage a proteger la vie privee des utilisateurs de son site internet.
+                </p>
+                <p class="mt-4">
+                    La presente politique de confidentialite a pour objet de vous informer sur la maniere dont nous collectons,
+                    utilisons et protegeons vos donnees personnelles, conformement au Reglement General sur la Protection des
+                    Donnees (RGPD - Reglement UE 2016/679) et a la loi francaise Informatique et Libertes du 6 janvier 1978 modifiee.
+                </p>
+            </section>
+
+            <!-- Responsable du traitement -->
+            <section class="bg-white/5 rounded-2xl p-6 border border-white/10">
+                <h2 class="text-xl text-white mb-4">2. Responsable du traitement</h2>
+                <p>
+                    Le responsable du traitement des donnees personnelles est :<br><br>
+                    <strong class="text-white"><%= restaurant.name || 'Eden Garden' %></strong><br>
+                    <%= restaurant.address || '30 Quai Lunel' %><br>
+                    <%= restaurant.postalCode || '06300' %> <%= restaurant.city || 'Nice' %>, France<br><br>
+                    <% if (restaurant.email) { %>Contact : <a href="mailto:<%= restaurant.email %>" class="text-amber-500 hover:text-amber-400"><%= restaurant.email %></a><% } %>
+                </p>
+            </section>
+
+            <!-- Donnees collectees -->
+            <section class="bg-white/5 rounded-2xl p-6 border border-white/10">
+                <h2 class="text-xl text-white mb-4">3. Donnees collectees</h2>
+                <p>Nous pouvons collecter les categories de donnees suivantes :</p>
+
+                <div class="mt-6 space-y-4">
+                    <div class="bg-black/30 rounded-xl p-4 border border-white/5">
+                        <h3 class="text-white font-medium mb-2">Donnees de navigation</h3>
+                        <ul class="list-disc list-inside text-sm space-y-1 ml-2">
+                            <li>Adresse IP</li>
+                            <li>Type et version du navigateur</li>
+                            <li>Systeme d'exploitation</li>
+                            <li>Pages visitees et duree de visite</li>
+                            <li>Source de trafic (referrer)</li>
+                        </ul>
+                    </div>
+
+                    <div class="bg-black/30 rounded-xl p-4 border border-white/5">
+                        <h3 class="text-white font-medium mb-2">Donnees de reservation (si applicable)</h3>
+                        <ul class="list-disc list-inside text-sm space-y-1 ml-2">
+                            <li>Nom et prenom</li>
+                            <li>Numero de telephone</li>
+                            <li>Date et heure de reservation</li>
+                            <li>Nombre de convives</li>
+                            <li>Demandes particulieres</li>
+                        </ul>
+                    </div>
+
+                    <div class="bg-black/30 rounded-xl p-4 border border-white/5">
+                        <h3 class="text-white font-medium mb-2">Donnees de contact</h3>
+                        <ul class="list-disc list-inside text-sm space-y-1 ml-2">
+                            <li>Messages envoyes via WhatsApp</li>
+                            <li>Appels telephoniques</li>
+                            <li>Emails</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Finalites -->
+            <section class="bg-white/5 rounded-2xl p-6 border border-white/10">
+                <h2 class="text-xl text-white mb-4">4. Finalites du traitement</h2>
+                <p>Vos donnees personnelles sont collectees et traitees pour les finalites suivantes :</p>
+
+                <div class="mt-4 overflow-x-auto">
+                    <table class="w-full text-sm">
+                        <thead>
+                            <tr class="border-b border-white/10">
+                                <th class="text-left py-3 pr-4 text-amber-400">Finalite</th>
+                                <th class="text-left py-3 text-amber-400">Base legale</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-white/5">
+                            <tr>
+                                <td class="py-3 pr-4 text-slate-300">Gestion des reservations</td>
+                                <td class="py-3">Execution du contrat</td>
+                            </tr>
+                            <tr>
+                                <td class="py-3 pr-4 text-slate-300">Reponse aux demandes de contact</td>
+                                <td class="py-3">Interet legitime</td>
+                            </tr>
+                            <tr>
+                                <td class="py-3 pr-4 text-slate-300">Amelioration du site et des services</td>
+                                <td class="py-3">Interet legitime</td>
+                            </tr>
+                            <tr>
+                                <td class="py-3 pr-4 text-slate-300">Statistiques de frequentation</td>
+                                <td class="py-3">Consentement (cookies)</td>
+                            </tr>
+                            <tr>
+                                <td class="py-3 pr-4 text-slate-300">Securite du site</td>
+                                <td class="py-3">Interet legitime</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Cookies -->
+            <section class="bg-white/5 rounded-2xl p-6 border border-white/10">
+                <h2 class="text-xl text-white mb-4">5. Cookies</h2>
+                <p>Notre site utilise des cookies pour fonctionner correctement et ameliorer votre experience.</p>
+
+                <div class="mt-6 space-y-4">
+                    <div class="bg-emerald-500/10 rounded-xl p-4 border border-emerald-500/30">
+                        <h3 class="text-emerald-400 font-medium mb-2">Cookies essentiels (obligatoires)</h3>
+                        <p class="text-sm">Necessaires au fonctionnement du site. Ils permettent de gerer votre session, vos preferences de cookies, et la securite.</p>
+                        <p class="text-xs text-slate-500 mt-2">Duree : Session ou 24 heures</p>
+                    </div>
+
+                    <div class="bg-blue-500/10 rounded-xl p-4 border border-blue-500/30">
+                        <h3 class="text-blue-400 font-medium mb-2">Cookies analytiques (optionnels)</h3>
+                        <p class="text-sm">Nous aident a comprendre comment les visiteurs utilisent le site (pages vues, duree de visite, etc.).</p>
+                        <p class="text-xs text-slate-500 mt-2">Duree : 13 mois maximum</p>
+                    </div>
+
+                    <div class="bg-purple-500/10 rounded-xl p-4 border border-purple-500/30">
+                        <h3 class="text-purple-400 font-medium mb-2">Cookies tiers</h3>
+                        <p class="text-sm">Issus de services externes : Google Fonts pour les polices d'ecriture, Iconify pour les icones.</p>
+                        <p class="text-xs text-slate-500 mt-2">Duree : Variable selon le service</p>
+                    </div>
+                </div>
+
+                <div class="mt-6 p-4 bg-amber-500/10 rounded-xl border border-amber-500/30">
+                    <h3 class="text-amber-400 font-medium mb-2">Gerer vos preferences</h3>
+                    <p class="text-sm">
+                        Vous pouvez a tout moment modifier vos preferences de cookies :
+                    </p>
+                    <ul class="list-disc list-inside text-sm mt-2 space-y-1 ml-2">
+                        <li>Via le bandeau de consentement affiche lors de votre premiere visite</li>
+                        <li>Dans les parametres de votre navigateur</li>
+                        <li>En supprimant les cookies de votre appareil</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Duree de conservation -->
+            <section class="bg-white/5 rounded-2xl p-6 border border-white/10">
+                <h2 class="text-xl text-white mb-4">6. Duree de conservation</h2>
+                <p>Vos donnees personnelles sont conservees pour une duree limitee :</p>
+
+                <div class="mt-4 overflow-x-auto">
+                    <table class="w-full text-sm">
+                        <thead>
+                            <tr class="border-b border-white/10">
+                                <th class="text-left py-3 pr-4 text-amber-400">Type de donnees</th>
+                                <th class="text-left py-3 text-amber-400">Duree de conservation</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-white/5">
+                            <tr>
+                                <td class="py-3 pr-4 text-slate-300">Donnees de navigation</td>
+                                <td class="py-3">13 mois maximum</td>
+                            </tr>
+                            <tr>
+                                <td class="py-3 pr-4 text-slate-300">Donnees de reservation</td>
+                                <td class="py-3">3 ans apres la derniere interaction</td>
+                            </tr>
+                            <tr>
+                                <td class="py-3 pr-4 text-slate-300">Cookies</td>
+                                <td class="py-3">13 mois maximum</td>
+                            </tr>
+                            <tr>
+                                <td class="py-3 pr-4 text-slate-300">Donnees de contact</td>
+                                <td class="py-3">3 ans apres le dernier contact</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Destinataires -->
+            <section class="bg-white/5 rounded-2xl p-6 border border-white/10">
+                <h2 class="text-xl text-white mb-4">7. Destinataires des donnees</h2>
+                <p>Vos donnees personnelles peuvent etre transmises aux destinataires suivants :</p>
+                <ul class="list-disc list-inside mt-4 space-y-2 ml-4">
+                    <li><strong class="text-white">Personnel habilite</strong> du restaurant (direction, service reservations)</li>
+                    <li><strong class="text-white">Hebergeur du site</strong> pour le stockage securise des donnees</li>
+                    <li><strong class="text-white">Plateformes de reservation</strong> partenaires (FoodBooking, etc.) si vous utilisez ces services</li>
+                    <li><strong class="text-white">Plateformes de livraison</strong> (Uber Eats, Deliveroo) si vous passez commande via ces services</li>
+                </ul>
+                <p class="mt-4">
+                    Nous ne vendons ni ne louons vos donnees personnelles a des tiers a des fins commerciales.
+                </p>
+            </section>
+
+            <!-- Transferts hors UE -->
+            <section class="bg-white/5 rounded-2xl p-6 border border-white/10">
+                <h2 class="text-xl text-white mb-4">8. Transferts hors Union Europeenne</h2>
+                <p>
+                    Certains de nos prestataires peuvent etre situes en dehors de l'Union Europeenne.
+                    Dans ce cas, nous nous assurons que des garanties appropriees sont mises en place
+                    (clauses contractuelles types de la Commission europeenne, certification Privacy Shield, etc.)
+                    pour assurer un niveau de protection adequat de vos donnees.
+                </p>
+            </section>
+
+            <!-- Droits -->
+            <section class="bg-white/5 rounded-2xl p-6 border border-white/10">
+                <h2 class="text-xl text-white mb-4">9. Vos droits</h2>
+                <p>Conformement au RGPD, vous disposez des droits suivants sur vos donnees personnelles :</p>
+
+                <div class="mt-6 grid md:grid-cols-2 gap-4">
+                    <div class="bg-black/30 rounded-xl p-4 border border-white/5">
+                        <h3 class="text-amber-400 font-medium mb-2">Droit d'acces</h3>
+                        <p class="text-sm">Obtenir une copie de toutes les donnees que nous detenons sur vous.</p>
+                    </div>
+                    <div class="bg-black/30 rounded-xl p-4 border border-white/5">
+                        <h3 class="text-amber-400 font-medium mb-2">Droit de rectification</h3>
+                        <p class="text-sm">Corriger des donnees inexactes ou incompletes vous concernant.</p>
+                    </div>
+                    <div class="bg-black/30 rounded-xl p-4 border border-white/5">
+                        <h3 class="text-amber-400 font-medium mb-2">Droit a l'effacement</h3>
+                        <p class="text-sm">Demander la suppression de vos donnees (sous conditions).</p>
+                    </div>
+                    <div class="bg-black/30 rounded-xl p-4 border border-white/5">
+                        <h3 class="text-amber-400 font-medium mb-2">Droit d'opposition</h3>
+                        <p class="text-sm">Vous opposer au traitement de vos donnees pour motifs legitimes.</p>
+                    </div>
+                    <div class="bg-black/30 rounded-xl p-4 border border-white/5">
+                        <h3 class="text-amber-400 font-medium mb-2">Droit a la limitation</h3>
+                        <p class="text-sm">Limiter le traitement de vos donnees dans certains cas.</p>
+                    </div>
+                    <div class="bg-black/30 rounded-xl p-4 border border-white/5">
+                        <h3 class="text-amber-400 font-medium mb-2">Droit a la portabilite</h3>
+                        <p class="text-sm">Recevoir vos donnees dans un format structure et lisible.</p>
+                    </div>
+                </div>
+
+                <div class="mt-6 p-4 bg-amber-500/10 rounded-xl border border-amber-500/30">
+                    <h3 class="text-amber-400 font-medium mb-2">Exercer vos droits</h3>
+                    <p class="text-sm">
+                        Pour exercer ces droits, contactez-nous :
+                    </p>
+                    <ul class="list-disc list-inside text-sm mt-2 space-y-1 ml-2">
+                        <li>Par email : <% if (restaurant.email) { %><a href="mailto:<%= restaurant.email %>" class="text-amber-500 hover:text-amber-400"><%= restaurant.email %></a><% } else { %>[Email de contact]<% } %></li>
+                        <li>Par courrier : <%= restaurant.address || '30 Quai Lunel' %>, <%= restaurant.postalCode || '06300' %> <%= restaurant.city || 'Nice' %></li>
+                    </ul>
+                    <p class="text-xs text-slate-500 mt-3">
+                        Nous repondrons a votre demande dans un delai d'un mois. Ce delai peut etre prolonge de deux mois
+                        en cas de demande complexe.
+                    </p>
+                </div>
+            </section>
+
+            <!-- Securite -->
+            <section class="bg-white/5 rounded-2xl p-6 border border-white/10">
+                <h2 class="text-xl text-white mb-4">10. Securite des donnees</h2>
+                <p>
+                    Nous mettons en oeuvre des mesures techniques et organisationnelles appropriees pour proteger
+                    vos donnees personnelles contre tout acces non autorise, modification, divulgation ou destruction :
+                </p>
+                <ul class="list-disc list-inside mt-4 space-y-2 ml-4">
+                    <li>Chiffrement des communications (HTTPS/SSL)</li>
+                    <li>Acces restreint aux donnees (authentification)</li>
+                    <li>Sauvegardes regulieres</li>
+                    <li>Mise a jour des systemes de securite</li>
+                </ul>
+            </section>
+
+            <!-- Reclamation -->
+            <section class="bg-white/5 rounded-2xl p-6 border border-white/10">
+                <h2 class="text-xl text-white mb-4">11. Reclamation aupres de la CNIL</h2>
+                <p>
+                    Si vous estimez que le traitement de vos donnees personnelles constitue une violation de vos droits,
+                    vous pouvez introduire une reclamation aupres de la Commission Nationale de l'Informatique et des
+                    Libertes (CNIL) :
+                </p>
+                <div class="mt-4 p-4 bg-black/30 rounded-xl">
+                    <p class="text-white font-medium">CNIL</p>
+                    <p class="text-sm mt-2">
+                        3 Place de Fontenoy - TSA 80715<br>
+                        75334 Paris Cedex 07<br>
+                        France<br><br>
+                        Site web : <a href="https://www.cnil.fr" target="_blank" rel="noopener" class="text-amber-500 hover:text-amber-400">www.cnil.fr</a>
+                    </p>
+                </div>
+            </section>
+
+            <!-- Modification -->
+            <section class="bg-white/5 rounded-2xl p-6 border border-white/10">
+                <h2 class="text-xl text-white mb-4">12. Modification de la politique</h2>
+                <p>
+                    Nous nous reservons le droit de modifier cette politique de confidentialite a tout moment.
+                    Toute modification sera publiee sur cette page avec une date de mise a jour.
+                </p>
+                <p class="mt-4">
+                    Nous vous encourageons a consulter regulierement cette page pour rester informe de nos pratiques
+                    en matiere de protection des donnees.
+                </p>
+            </section>
+        </div>
+
+        <p class="text-xs text-slate-600 mt-12 text-center">
+            Derniere mise a jour : Janvier 2025
+        </p>
+    </main>
+
+    <!-- Footer simple -->
+    <footer class="border-t border-white/10 py-8">
+        <div class="max-w-4xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-slate-500">
+            <p>&copy; 2025 <%= restaurant.name || 'Eden Garden' %>. Tous droits reserves.</p>
+            <div class="flex gap-6">
+                <a href="/mentions-legales" class="hover:text-white transition-colors">Mentions legales</a>
+                <a href="/confidentialite" class="text-amber-500">Confidentialite</a>
+            </div>
+        </div>
+    </footer>
+</body>
+
+</html>

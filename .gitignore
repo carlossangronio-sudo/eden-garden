@@ -1,0 +1,34 @@
+# Dependencies
+node_modules/
+
+# Environment variables (IMPORTANT: ne jamais commiter!)
+.env
+.env.local
+.env.*.local
+
+# Database
+*.sqlite
+*.sqlite3
+database.sqlite
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Build
+dist/
+build/
+
+# Vercel
+.vercel/

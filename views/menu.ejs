@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nos Menus - <%= restaurant.name || 'Eden Garden' %>
+    </title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap');
+
+        h1,
+        h2,
+        h3,
+        .font-serif {
+            font-family: 'Playfair Display', serif;
+        }
+
+        body,
+        p,
+        a {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+    </style>
+</head>
+
+<body class="bg-[#050505] min-h-screen text-white">
+
+    <!-- Header -->
+    <header class="fixed top-0 left-0 right-0 z-50 bg-black/80 backdrop-blur-xl border-b border-white/10">
+        <div class="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
+            <a href="/"
+                class="text-xl font-serif font-semibold tracking-tighter text-white uppercase flex items-center gap-2">
+                <span class="text-amber-500">Eden</span> Garden
+            </a>
+            <a href="/" class="text-sm text-slate-400 hover:text-white transition-colors flex items-center gap-2">
+                <iconify-icon icon="mdi:arrow-left" width="16"></iconify-icon>
+                Retour au site
+            </a>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="pt-32 pb-20 px-6">
+        <div class="max-w-4xl mx-auto text-center">
+            <span class="text-amber-500 text-xs font-bold tracking-widest uppercase">Découvrez</span>
+            <h1 class="text-4xl md:text-6xl font-serif text-white mt-4 mb-6">Nos Menus</h1>
+            <p class="text-slate-400 max-w-2xl mx-auto mb-16">
+                Explorez notre carte fusion afro-réunionnaise dans la langue de votre choix.
+                Cliquez sur un menu pour le consulter en version interactive.
+            </p>
+
+            <!-- Menu Cards -->
+            <div class="grid md:grid-cols-3 gap-6">
+                <!-- French Menu -->
+                <a href="https://heyzine.com/flip-book/5fdd4d611d.html" target="_blank" rel="noopener"
+                    class="group bg-white/5 border border-white/10 rounded-2xl p-8 hover:bg-white/10 hover:border-amber-500/50 transition-all hover:scale-105">
+                    <div class="text-6xl mb-4">🇫🇷</div>
+                    <h2 class="text-xl font-serif text-white mb-2">Menu Français</h2>
+                    <p class="text-sm text-slate-500 mb-4">Notre carte complète en français</p>
+                    <span
+                        class="inline-flex items-center gap-2 text-amber-400 text-sm font-medium group-hover:gap-3 transition-all">
+                        Consulter
+                        <iconify-icon icon="mdi:arrow-right" width="16"></iconify-icon>
+                    </span>
+                </a>
+
+                <!-- English Menu -->
+                <a href="https://heyzine.com/flip-book/b8296d9b14.html" target="_blank" rel="noopener"
+                    class="group bg-white/5 border border-white/10 rounded-2xl p-8 hover:bg-white/10 hover:border-amber-500/50 transition-all hover:scale-105">
+                    <div class="text-6xl mb-4">🇬🇧</div>
+                    <h2 class="text-xl font-serif text-white mb-2">English Menu</h2>
+                    <p class="text-sm text-slate-500 mb-4">Our full menu in English</p>
+                    <span
+                        class="inline-flex items-center gap-2 text-amber-400 text-sm font-medium group-hover:gap-3 transition-all">
+                        View Menu
+                        <iconify-icon icon="mdi:arrow-right" width="16"></iconify-icon>
+                    </span>
+                </a>
+
+                <!-- Italian Menu -->
+                <a href="https://heyzine.com/flip-book/50cf755523.html" target="_blank" rel="noopener"
+                    class="group bg-white/5 border border-white/10 rounded-2xl p-8 hover:bg-white/10 hover:border-amber-500/50 transition-all hover:scale-105">
+                    <div class="text-6xl mb-4">🇮🇹</div>
+                    <h2 class="text-xl font-serif text-white mb-2">Menu Italiano</h2>
+                    <p class="text-sm text-slate-500 mb-4">Il nostro menu completo in italiano</p>
+                    <span
+                        class="inline-flex items-center gap-2 text-amber-400 text-sm font-medium group-hover:gap-3 transition-all">
+                        Visualizza
+                        <iconify-icon icon="mdi:arrow-right" width="16"></iconify-icon>
+                    </span>
+                </a>
+            </div>
+
+            <!-- CTA -->
+            <div class="mt-16 pt-8 border-t border-white/10">
+                <p class="text-slate-500 mb-4">Envie de réserver une table ?</p>
+                <a href="<%= restaurant.reservationExternalUrl || '/' %>" target="_blank" rel="noopener"
+                    class="inline-flex items-center gap-2 px-8 py-4 bg-amber-600 text-white font-bold rounded-full hover:bg-amber-500 transition-all">
+                    <iconify-icon icon="mdi:calendar" width="20"></iconify-icon>
+                    Réserver maintenant
+                </a>
+            </div>
+        </div>
+    </main>
+
+</body>
+
+</html>
