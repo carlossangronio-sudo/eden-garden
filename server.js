@@ -168,6 +168,73 @@ app.get('/api/seed', async (req, res) => {
     }
 });
 
+// Route pour mettre à jour les données complètes (à supprimer après usage)
+app.get('/api/update-data', async (req, res) => {
+    try {
+        const { RestaurantInfo, MenuItem } = require('./models');
+
+        // Mettre à jour les infos restaurant
+        const restaurant = await RestaurantInfo.findOne();
+        if (restaurant) {
+            await restaurant.update({
+                name: 'Eden Garden',
+                address: '30 Quai Lunel',
+                city: 'Nice',
+                postalCode: '06300',
+                phone: '+33 4 93 56 XX XX',
+                email: 'contact@edengarden-nice.fr',
+                openingHours: 'Mer-Dim: 12h00-00h30 | Lun-Mar: Fermé',
+                heroTagline: 'Nice Port · France',
+                heroDescription: 'Une fusion audacieuse entre la gastronomie afro-réunionnaise et l\'élégance de la vie nocturne azuréenne. Restaurant, Bar Lounge & Chicha Premium.',
+                atmosphereTitle: 'Plus qu\'un restaurant, un lieu de vie.',
+                atmosphereText: 'L\'Eden Garden redéfinit vos soirées à Nice. Commencez par un dîner aux saveurs épicées, poursuivez avec un cocktail créatif sur notre terrasse face au port, et terminez en beauté avec une chicha Kaloud premium devant les plus grands matchs.',
+                reservationText: 'Pour le dîner ou pour le lounge, assurez-vous d\'avoir la meilleure place. Réservation instantanée sans prépaiement.',
+                instagramUrl: 'https://instagram.com/edengardennice',
+                facebookUrl: 'https://facebook.com/edengardennice',
+                mapUrl: 'https://maps.google.com/?q=30+Quai+Lunel+06300+Nice',
+                uberEatsUrl: 'https://www.ubereats.com/fr/store/eden-garden/QWGcdg7XWze-UTEhFUTC0A',
+                deliverooUrl: 'https://deliveroo.fr/fr/menu/nice/nice-vieux-nice/eden-garden-nice',
+                eventsTitle: 'Privatisez l\'Eden pour vos moments uniques',
+                eventsDescription: 'Anniversaires, afterworks, soirées privées, événements d\'entreprise... Notre équipe vous accompagne pour créer une expérience sur mesure dans un cadre exceptionnel face au Port de Nice.',
+                eventsCapacity: '50',
+                whatsappNumber: '33652826430'
+            });
+        }
+
+        // Mettre à jour les items menu avec descriptions complètes
+        await MenuItem.update(
+            { description: 'Cuisse de poulet marinée au citron vert, oignons confits, olives, servi avec riz blanc parfumé.', imageUrl: 'https://images.unsplash.com/photo-1604382354936-07c5d9983bd3?w=800' },
+            { where: { title: 'Poulet Yassa' } }
+        );
+        await MenuItem.update(
+            { description: 'Saucisses fumées traditionnelles, mijotées dans une sauce tomate aux épices réunionnaises.', imageUrl: 'https://images.unsplash.com/photo-1594910091040-5b481358c279?w=800' },
+            { where: { title: 'Rougail Saucisse' } }
+        );
+        await MenuItem.update(
+            { description: 'Assortiment royal : Agneau, Poulet, Merguez, accompagné d\'alloco et sauce verte maison.', imageUrl: 'https://images.unsplash.com/photo-1529692236671-f1f6cf9683ba?w=800' },
+            { where: { title: 'Mix Grill Eden' } }
+        );
+
+        // Ajouter Signature Cocktails si pas présent
+        const cocktail = await MenuItem.findOne({ where: { title: 'Signature Cocktails' } });
+        if (!cocktail) {
+            await MenuItem.create({
+                title: 'Signature Cocktails',
+                description: 'Découvrez notre carte de cocktails créatifs, avec ou sans alcool.',
+                price: 12.00,
+                imageUrl: 'https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?w=800',
+                category: 'Cocktail',
+                isVisible: true,
+                position: 4
+            });
+        }
+
+        res.json({ success: true, message: 'Données mises à jour!' });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
 // Routes
 app.use('/', publicRoutes);
 app.use('/admin', adminRoutes);
